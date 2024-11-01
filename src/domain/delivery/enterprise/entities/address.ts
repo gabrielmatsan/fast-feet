@@ -1,6 +1,9 @@
-import type { Optional } from "@/core/types/optional"
+import { Entity } from "@/core/entities/entity"
+import  { UniqueEntityId } from "@/core/entities/unique-entity-id"
+import  { Optional } from "@/core/types/optional"
 
 export interface AddressProps{
+  recipientId: UniqueEntityId
   street: string
   number: string
   complement?: string | null
@@ -8,23 +11,20 @@ export interface AddressProps{
   city: string
   state: string
   zipcode: string
+  latitude: number
+  longitude: number
 }
 
 
-export class Address{
+export class Address extends Entity<AddressProps>{
   
-  private props: AddressProps
-
-  constructor(props: AddressProps){
-    this.props = props
-  }
-  static create(props:Optional<AddressProps, 'complement'>):Address{
+  static create(props:Optional<AddressProps, 'complement'>, id?: UniqueEntityId):Address{
     const complementProps = {
       ...props,
       complement: props.complement ?? null
     }
 
-    return new Address(complementProps)
+    return new Address(complementProps, id)
 
   }
 
@@ -54,5 +54,13 @@ export class Address{
 
   get zipcode() {
     return this.props.zipcode
+  }
+
+  get latitude() {
+    return this.props.latitude
+  }
+
+  get longitude() {
+    return this.props.longitude
   }
 }

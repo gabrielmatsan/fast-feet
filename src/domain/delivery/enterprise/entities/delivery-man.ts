@@ -6,6 +6,8 @@ export interface DeliveryManProps {
   name: string
   email: string
   password: string
+  deliveryManLatitude?: number | null; // Localização atual do entregador (opcional no início)
+  deliveryManLongitude?: number | null;
 }
 
 export class DeliveryMan extends Entity<DeliveryManProps> {
@@ -29,5 +31,13 @@ export class DeliveryMan extends Entity<DeliveryManProps> {
 
   get password() {
     return this.props.password
+  }
+
+  get deliveryManLatitude() {
+    return this.props.deliveryManLatitude ?? null
+  }
+
+  get deliveryManLongitude() {
+    return this.props.deliveryManLongitude ?? null
   }
 }

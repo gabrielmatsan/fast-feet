@@ -11,7 +11,7 @@ export interface RecipientProps {
   phone: string
   password: string
 
-  address: Address
+  addressId: UniqueEntityId
 }
 
 
@@ -42,7 +42,7 @@ export class Recipient extends Entity<RecipientProps>{
     return this.props.password
   }
 
-  get address() {
-    return this.props.address
+  get addressId() {
+    return this.props.addressId
   }
 }
