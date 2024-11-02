@@ -1,17 +1,15 @@
 import { Entity } from "@/core/entities/entity"
 import  { Address } from "./address"
-import type { UniqueEntityId } from "@/core/entities/unique-entity-id"
+import { UniqueEntityId } from "@/core/entities/unique-entity-id"
 
 export interface RecipientProps {
-
-  // dados pessoais
   name: string
   cpf: string
   email: string
   phone: string
   password: string
 
-  addressId: UniqueEntityId
+  addressId?: UniqueEntityId | null
 }
 
 
@@ -43,6 +41,10 @@ export class Recipient extends Entity<RecipientProps>{
   }
 
   get addressId() {
-    return this.props.addressId
+    return this.props.addressId ?? null
+  }
+
+  set addressId(addressId: UniqueEntityId | null) {
+    this.props.addressId = addressId
   }
 }

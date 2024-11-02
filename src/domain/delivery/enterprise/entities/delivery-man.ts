@@ -4,8 +4,8 @@ import  { UniqueEntityId } from "@/core/entities/unique-entity-id"
 export interface DeliveryManProps {
   cpf: string
   name: string
-  email: string
   password: string
+  phone: string
   deliveryManLatitude?: number | null; // Localização atual do entregador (opcional no início)
   deliveryManLongitude?: number | null;
 }
@@ -25,10 +25,6 @@ export class DeliveryMan extends Entity<DeliveryManProps> {
     return this.props.name
   }
 
-  get email() {
-    return this.props.email
-  }
-
   get password() {
     return this.props.password
   }
@@ -39,5 +35,9 @@ export class DeliveryMan extends Entity<DeliveryManProps> {
 
   get deliveryManLongitude() {
     return this.props.deliveryManLongitude ?? null
+  }
+
+  get phone() {
+    return this.props.phone
   }
 }
