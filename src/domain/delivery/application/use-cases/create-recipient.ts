@@ -2,6 +2,7 @@ import { Either, left, right } from "@/core/either"
 import { Recipient } from "../../enterprise/entities/recipient"
 import { RecipientRepository } from "../repositories/recipient-repository"
 import { RecipientAlreadyExistsError } from "./error/recipient-already-exists-error"
+import { HashGenerator } from "../../criptography/hash-generator"
 
 export interface CreateRecipientRequest {
   name: string
@@ -17,7 +18,7 @@ type CreateRecipientResponse = Either<RecipientAlreadyExistsError,{
 
 export class CreateRecipientUseCase{
 
-  constructor(private recipientRepository: RecipientRepository){}
+  constructor(private recipientRepository: RecipientRepository, private hashGenerator:HashGenerator){}
 
   async execute({name,cpf,email,password,phone}:CreateRecipientRequest): Promise<CreateRecipientResponse>{
     const isCpfAlreadyExists = await this.recipientRepository.findByCpf(cpf)
@@ -32,13 +33,17 @@ export class CreateRecipientUseCase{
       return left(new RecipientAlreadyExistsError())
     }
 
+    const hashedPassword = await this.hashGenerator.hash(password)
+
     const recipient = Recipient.create({
       name,
       cpf,
       email,
       phone,
-      password
+      password: hashedPassword
     })
+
+    await this.recipientRepository.create(recipient)
 
     return right({recipient})
   } 
