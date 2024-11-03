@@ -30,7 +30,8 @@ describe('Edit Address', () => {
   
     // Dados do novo endereço para atualizar
     const updatedAddressData = {
-      recipientId: recipient.id,
+      addressId: address.id.toString(),
+      recipientId: recipient.id.toString(),
       street: 'Updated Street',
       number: '456',
       complement: 'Apt. 789',
@@ -44,12 +45,44 @@ describe('Edit Address', () => {
   
     // Executa o caso de uso
     const result = await sut.execute(updatedAddressData);
-    console.log(updatedAddressData.recipientId)
-    console.log(address.recipientId)
-    console.log(updatedAddressData.recipientId===address.recipientId)
   
     // Verificações
     expect(result.isRight()).toBe(true);
     expect(inMemoryRecipientRepository.items).toHaveLength(1);
+  });
+
+  it('should not be able to edit an address from another user', async () => {
+    const recipient1 = makeRecipient();
+    const recipient2 = makeRecipient();
+
+    const address1 = makeAddress({recipientId: recipient1.id})
+    const address2 = makeAddress({recipientId: recipient2.id})
+
+
+    recipient1.addressId = address1.id
+    recipient2.addressId = address2.id
+
+    await inMemoryRecipientRepository.create(recipient1)
+    await inMemoryAddressRepository.create(address1)
+
+    await inMemoryRecipientRepository.create(recipient2)
+    await inMemoryAddressRepository.create(address2)
+
+
+    const result = await sut.execute({
+      recipientId: recipient2.id.toString(),
+      addressId: address1.id.toString(),
+      street: address1.street,
+      number: address1.number,
+      complement: address1.complement,
+      neighborhood: address1.neighborhood,
+      city: address1.city,
+      state: address1.state,
+      zipcode: address1.zipcode,
+      latitude: address1.latitude,
+      longitude: address1.longitude
+    })
+
+    expect(result.isLeft()).toBe(true)
   });
 })

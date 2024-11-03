@@ -6,7 +6,7 @@ import { RecipientRepository } from "../repositories/recipient-repository"
 import { ResourceNotFoundError } from "./error/resource-not-found-error"
 
 export interface CreateAddressRequest {
-  recipientId: UniqueEntityId
+  recipientId: string
   street: string
   number: string
   complement?: string | null
@@ -24,6 +24,7 @@ export class CreateAddressUseCase{
   constructor(private addressRepository: AddressRepository, private recipientRepository: RecipientRepository){}
 
   async execute(addressData: CreateAddressRequest): Promise<CreateAddressResponse>{
+
     const recipient = await this.recipientRepository.findById(addressData.recipientId.toString())
 
     if (!recipient){
@@ -31,7 +32,7 @@ export class CreateAddressUseCase{
     }
 
     const address = Address.create({
-      recipientId: addressData.recipientId,
+      recipientId: new UniqueEntityId(addressData.recipientId),
       street: addressData.street,
       number: addressData.number,
       complement: addressData.complement,
