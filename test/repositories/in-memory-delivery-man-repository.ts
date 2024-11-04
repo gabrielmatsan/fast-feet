@@ -1,5 +1,8 @@
 import { DeliveryManRepository } from "@/domain/delivery/application/repositories/delivery-man-repository";
 import { DeliveryMan } from "@/domain/delivery/enterprise/entities/delivery-man";
+import { Order } from "@/domain/delivery/enterprise/entities/order";
+import { InMemoryOrderRepository } from "./in-memory-order-repository";
+import { Coordinate, getDistanceBetweenCoordinates } from "test/utils/get-distance-between-coordinates";
 
 export class InMemoryDeliveryManRepository implements DeliveryManRepository{
 

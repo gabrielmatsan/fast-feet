@@ -1,7 +1,7 @@
 import { AggregateRoot } from "@/core/entities/aggregate-root"
 import { UniqueEntityId } from "@/core/entities/unique-entity-id"
 import { Optional } from "@/core/types/optional"
-import { Slug } from "./value-objects/slug"
+
 
 export interface OrderProps {
   recipientId: UniqueEntityId
@@ -10,7 +10,6 @@ export interface OrderProps {
 
   title: string
   content: string
-  slug: Slug
   status: OrderStatus
   isRemovable: boolean
   paymentMethod: string
@@ -19,6 +18,9 @@ export interface OrderProps {
   updatedAt?: Date | null
   expectedDeliveryDate?: Date | null
 
+  deliveryLatitude: number
+  deliveryLongitude: number
+
   shipping: number
 }
 
@@ -26,13 +28,12 @@ export type OrderStatus = 'pending' | 'awaiting' | 'inTransit' | 'delivered' | '
 
 
 export class Order extends AggregateRoot<OrderProps> {
-  static create(props: Optional<OrderProps, 'createdAt' | 'status' | 'deliveryManId'|'expectedDeliveryDate' | 'slug'>, id?: UniqueEntityId) {
+  static create(props: Optional<OrderProps, 'createdAt' | 'status' | 'deliveryManId'|'expectedDeliveryDate'>, id?: UniqueEntityId) {
     const order = new Order({...props,
       createdAt: new Date(),
       status: props.status ?? 'pending',
       deliveryManId: props.deliveryManId ?? null,
       expectedDeliveryDate: props.expectedDeliveryDate ?? null,
-      slug: props.slug ?? Slug.createFromText(props.title)
     },
      id)
 
@@ -44,7 +45,12 @@ export class Order extends AggregateRoot<OrderProps> {
   }
 
   get deliveryManId(){
-    return this.props.deliveryManId
+    return this.props.deliveryManId ?? null
+  }
+
+  set deliveryManId(deliveryManId: UniqueEntityId | null) {
+    this.props.deliveryManId = deliveryManId
+    this.touch()
   }
 
   get addressId(){
@@ -97,8 +103,12 @@ export class Order extends AggregateRoot<OrderProps> {
     return this.props.content
   }
 
-  get slug(){
-    return this.props.slug
+  get deliveryLatitude(){
+    return this.props.deliveryLatitude
+  }
+
+  get deliveryLongitude(){
+    return this.props.deliveryLongitude
   }
 
   private touch(){

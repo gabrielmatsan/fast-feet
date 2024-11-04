@@ -10,7 +10,6 @@ export function makeRecipient(override: Partial<RecipientProps> = {}, id?: Uniqu
       email: override.email ?? faker.internet.email(),
       password: override.password ?? faker.internet.password(),
       phone: override.phone ?? faker.phone.number(),
-      addressId: override.addressId ?? new UniqueEntityId(),
       },
     id,
   );

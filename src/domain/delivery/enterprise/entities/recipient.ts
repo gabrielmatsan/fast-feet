@@ -8,8 +8,6 @@ export interface RecipientProps {
   email: string
   phone: string
   password: string
-
-  addressId?: UniqueEntityId | null
 }
 
 
@@ -38,13 +36,5 @@ export class Recipient extends Entity<RecipientProps>{
 
   get password() {
     return this.props.password
-  }
-
-  get addressId() {
-    return this.props.addressId ?? null
-  }
-
-  set addressId(addressId: UniqueEntityId | null) {
-    this.props.addressId = addressId
   }
 }

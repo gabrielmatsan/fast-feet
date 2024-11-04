@@ -1,5 +1,6 @@
-import  { OrderRepository } from "@/domain/delivery/application/repositories/order-repository"
+import  { OrderRepository, findManyNearbyParams } from "@/domain/delivery/application/repositories/order-repository"
 import  { Order } from "@/domain/delivery/enterprise/entities/order"
+import { getDistanceBetweenCoordinates, type Coordinate } from "test/utils/get-distance-between-coordinates"
 
 
 export class InMemoryOrderRepository implements OrderRepository{
@@ -28,13 +29,15 @@ export class InMemoryOrderRepository implements OrderRepository{
     return order
   }
 
-  async findBySlug(slug: string): Promise<Order | null> {
-    const order = this.items.find((item) => item.slug.value === slug)
+  async findManyNearby({ latitude, longitude, maxDistance }: findManyNearbyParams): Promise<Order[]> {
+    return this.items.filter((item)=> {
 
-    if (!order) {
-      return null
-    }
+      const distance = getDistanceBetweenCoordinates(
+        {latitude,longitude},
+        {latitude:item.deliveryLatitude, longitude:item.deliveryLongitude}
+    )
 
-    return order
-  }
+    return distance <= maxDistance
+    })
+  } 
 }

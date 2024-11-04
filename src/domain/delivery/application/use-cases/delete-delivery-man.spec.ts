@@ -1,17 +1,19 @@
 import  { InMemoryDeliveryManRepository } from "test/repositories/in-memory-delivery-man-repository"
-import  { CreateDeliveryManUseCase } from "./create-delivery-man"
 import { makeDeliveryMan } from "test/factories/make-delivery-man-factory"
 import { DeleteDeliveryManUseCase } from "./delete-delivery-man"
 import { FakeHasher } from "test/criptography/fake-hasher"
+import { InMemoryOrderRepository } from "test/repositories/in-memory-order-repository"
 
 
 let sut: DeleteDeliveryManUseCase
+let inMemoryOrderRepository: InMemoryOrderRepository
 let inMemoryDeliveryManRepository: InMemoryDeliveryManRepository
 let fakeHasher: FakeHasher
 
 describe('Delete Delivery Man', () => {
   beforeEach(()=>{
     fakeHasher = new FakeHasher()
+    inMemoryOrderRepository = new InMemoryOrderRepository()
     inMemoryDeliveryManRepository = new InMemoryDeliveryManRepository()
     sut = new DeleteDeliveryManUseCase(inMemoryDeliveryManRepository,fakeHasher)
   })

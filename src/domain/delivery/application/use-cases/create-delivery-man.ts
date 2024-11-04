@@ -8,8 +8,8 @@ export interface CreateDeliveryManRequest{
   name: string
   password: string
   phone: string
-  deliveryManLatitude?: number | null
-  deliveryManLongitude?: number | null
+  deliveryManLatitude: number
+  deliveryManLongitude: number
 }
 
 type CreateDeliveryManResponse = Either<DeliveryManAlreadyExistsError,{

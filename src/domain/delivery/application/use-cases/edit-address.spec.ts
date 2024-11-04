@@ -24,7 +24,6 @@ describe('Edit Address', () => {
     });
   
     // Associo o endereço ao destinatário e adiciono ambos ao repositório
-    recipient.addressId = address.id;
     await inMemoryRecipientRepository.create(recipient);
     await inMemoryAddressRepository.create(address);
   
@@ -57,10 +56,6 @@ describe('Edit Address', () => {
 
     const address1 = makeAddress({recipientId: recipient1.id})
     const address2 = makeAddress({recipientId: recipient2.id})
-
-
-    recipient1.addressId = address1.id
-    recipient2.addressId = address2.id
 
     await inMemoryRecipientRepository.create(recipient1)
     await inMemoryAddressRepository.create(address1)

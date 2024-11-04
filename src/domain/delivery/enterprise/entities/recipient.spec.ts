@@ -8,7 +8,6 @@ describe('Recipient', () => {
     
     // Criação do ID único
     const recipientId = new UniqueEntityId();
-    const id = new UniqueEntityId();
 
     // Criação da instância de Recipient
     const recipient = Recipient.create({
@@ -33,7 +32,6 @@ describe('Recipient', () => {
       longitude: -46.6333
     });
 
-    recipient.addressId = address.id;
     // Verificações
     expect(recipient).toBeInstanceOf(Recipient);
     expect(recipient.name).toBe("João da Silva");
