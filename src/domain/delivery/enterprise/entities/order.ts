@@ -2,6 +2,7 @@ import { AggregateRoot } from "@/core/entities/aggregate-root"
 import { UniqueEntityId } from "@/core/entities/unique-entity-id"
 import { Optional } from "@/core/types/optional"
 import { OrderAttachmentList } from "./attachment-order-list"
+import { OrderDeliveredEvent } from "../events/order-delivered-event"
 
 
 export interface OrderProps {
@@ -140,6 +141,7 @@ export class Order extends AggregateRoot<OrderProps> {
 
   markAsDelivered() {
     this.props.status = 'delivered';
+    this.addDomainEvent(new OrderDeliveredEvent(this))
     this.touch();
   }
 
