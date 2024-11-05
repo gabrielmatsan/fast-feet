@@ -1,18 +1,18 @@
-import  { InMemoryRecipientRepository } from "test/repositories/in-memory-recipient-repository"
-import { CreateRecipientUseCase } from "./create-recipient"
-import { makeRecipient } from "test/factories/make-recipient-factory"
-import { FakeHasher } from "test/criptography/fake-hasher"
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { CreateRecipientUseCase } from './create-recipient'
+import { makeRecipient } from 'test/factories/make-recipient-factory'
+import { FakeHasher } from 'test/criptography/fake-hasher'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let fakeHasher: FakeHasher
 let sut: CreateRecipientUseCase
 describe('Create Recipient', () => {
-  beforeEach(()=>{
+  beforeEach(() => {
     fakeHasher = new FakeHasher()
 
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
 
-    sut = new CreateRecipientUseCase(inMemoryRecipientRepository,fakeHasher)
+    sut = new CreateRecipientUseCase(inMemoryRecipientRepository, fakeHasher)
   })
 
   it('should be able to create a recipient', async () => {
@@ -32,6 +32,8 @@ describe('Create Recipient', () => {
     // verificações
     expect(result.isRight()).toBe(true)
     expect(inMemoryRecipientRepository.items).toHaveLength(1)
-    expect(inMemoryRecipientRepository.items[0].password).toEqual(hashedPassword)
+    expect(inMemoryRecipientRepository.items[0].password).toEqual(
+      hashedPassword,
+    )
   })
 })

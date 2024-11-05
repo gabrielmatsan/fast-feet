@@ -1,27 +1,24 @@
-import { DomainEvents } from "@/core/events/domain-events";
-import { EventHandler } from "@/core/events/event-handler";
-import { OrderInTransitEvent } from "@/domain/delivery/enterprise/events/order-in-transit-event";
-import { SendNotificationUseCase } from "../use-cases/send-notification";
+import { DomainEvents } from '@/core/events/domain-events'
+import { EventHandler } from '@/core/events/event-handler'
+import { OrderInTransitEvent } from '@/domain/delivery/enterprise/events/order-in-transit-event'
+import { SendNotificationUseCase } from '../use-cases/send-notification'
 
-export class OnOrderInTransit implements EventHandler{
-  constructor(
-    private sendNotification: SendNotificationUseCase
-  ){
+export class OnOrderInTransit implements EventHandler {
+  constructor(private sendNotification: SendNotificationUseCase) {
     this.setupSubscriptions()
   }
+
   setupSubscriptions(): void {
     DomainEvents.register(
       this.sendNewOrderNotification.bind(this),
-      OrderInTransitEvent.name
+      OrderInTransitEvent.name,
     )
   }
 
-  private async sendNewOrderNotification({order}:OrderInTransitEvent){
-    
+  private async sendNewOrderNotification({ order }: OrderInTransitEvent) {
     await this.sendNotification.execute({
       recipientId: order.recipientId.toString(),
-      title: `Order "${order.id}" in transit`
+      title: `Order "${order.id}" in transit`,
     })
   }
-
 }

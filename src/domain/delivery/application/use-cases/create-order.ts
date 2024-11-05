@@ -1,9 +1,9 @@
-import { Either, left, right } from "@/core/either"
-import { Order, OrderStatus } from "../../enterprise/entities/order"
-import { OrderRepository } from "../repositories/order-repository"
-import { AddressRepository } from "../repositories/address-repository"
-import { RecipientRepository } from "../repositories/recipient-repository"
-import { UniqueEntityId } from "@/core/entities/unique-entity-id"
+import { Either, left, right } from '@/core/either'
+import { Order, OrderStatus } from '../../enterprise/entities/order'
+import { OrderRepository } from '../repositories/order-repository'
+import { AddressRepository } from '../repositories/address-repository'
+import { RecipientRepository } from '../repositories/recipient-repository'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
 export interface CreateOrderRequest {
   recipientId: string
@@ -42,7 +42,6 @@ export class CreateOrderUseCase {
     deliveryLatitude,
     deliveryLongitude,
   }: CreateOrderRequest): Promise<CreateOrderResponse> {
-
     const recipient = await this.recipientRepository.findById(recipientId)
     if (!recipient) {
       return left(null)

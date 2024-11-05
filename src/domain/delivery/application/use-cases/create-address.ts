@@ -1,9 +1,9 @@
-import { Either, left, right } from "@/core/either"
-import { Address } from "../../enterprise/entities/address"
-import { UniqueEntityId } from "@/core/entities/unique-entity-id"
-import { AddressRepository } from "../repositories/address-repository"
-import { RecipientRepository } from "../repositories/recipient-repository"
-import { ResourceNotFoundError } from "./error/resource-not-found-error"
+import { Either, left, right } from '@/core/either'
+import { Address } from '../../enterprise/entities/address'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { AddressRepository } from '../repositories/address-repository'
+import { RecipientRepository } from '../repositories/recipient-repository'
+import { ResourceNotFoundError } from './error/resource-not-found-error'
 
 export interface CreateAddressRequest {
   recipientId: string
@@ -20,14 +20,20 @@ export interface CreateAddressRequest {
 
 type CreateAddressResponse = Either<ResourceNotFoundError, { address: Address }>
 
-export class CreateAddressUseCase{
-  constructor(private addressRepository: AddressRepository, private recipientRepository: RecipientRepository){}
+export class CreateAddressUseCase {
+  constructor(
+    private addressRepository: AddressRepository,
+    private recipientRepository: RecipientRepository,
+  ) {}
 
-  async execute(addressData: CreateAddressRequest): Promise<CreateAddressResponse>{
+  async execute(
+    addressData: CreateAddressRequest,
+  ): Promise<CreateAddressResponse> {
+    const recipient = await this.recipientRepository.findById(
+      addressData.recipientId.toString(),
+    )
 
-    const recipient = await this.recipientRepository.findById(addressData.recipientId.toString())
-
-    if (!recipient){
+    if (!recipient) {
       return left(new ResourceNotFoundError())
     }
 
@@ -41,12 +47,11 @@ export class CreateAddressUseCase{
       state: addressData.state,
       zipcode: addressData.zipcode,
       latitude: addressData.latitude,
-      longitude: addressData.longitude
+      longitude: addressData.longitude,
     })
 
     await this.addressRepository.create(address)
 
     return right({ address })
-
   }
 }

@@ -1,25 +1,25 @@
-import  { InMemoryRecipientRepository } from "test/repositories/in-memory-recipient-repository"
-import { makeRecipient } from "test/factories/make-recipient-factory"
-import { FakeHasher } from "test/criptography/fake-hasher"
-import { DeleteRecipientUseCase } from "./delete-recipient"
-import { WrongCredentialsError } from "./error/wrong-credentials-error"
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { makeRecipient } from 'test/factories/make-recipient-factory'
+import { FakeHasher } from 'test/criptography/fake-hasher'
+import { DeleteRecipientUseCase } from './delete-recipient'
+import { WrongCredentialsError } from './error/wrong-credentials-error'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let fakeHasher: FakeHasher
 let sut: DeleteRecipientUseCase
 describe('Delete Recipient', () => {
-  beforeEach(()=>{
+  beforeEach(() => {
     fakeHasher = new FakeHasher()
 
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
 
-    sut = new DeleteRecipientUseCase(inMemoryRecipientRepository,fakeHasher)
+    sut = new DeleteRecipientUseCase(inMemoryRecipientRepository, fakeHasher)
   })
 
   it('should be able to delete a recipient', async () => {
     // crio o destinatario
     const recipient = makeRecipient({
-      password: await fakeHasher.hash('123456')
+      password: await fakeHasher.hash('123456'),
     })
 
     await inMemoryRecipientRepository.create(recipient)
@@ -28,7 +28,7 @@ describe('Delete Recipient', () => {
 
     const result = await sut.execute({
       recipientId: recipient.id.toString(),
-      password: '123456'
+      password: '123456',
     })
     // verificações
     expect(result.isRight()).toBe(true)
@@ -38,7 +38,7 @@ describe('Delete Recipient', () => {
   it('should not be able to delete a recipient with wrong password', async () => {
     // crio o destinatario
     const recipient = makeRecipient({
-      password: await fakeHasher.hash('123456')
+      password: await fakeHasher.hash('123456'),
     })
 
     await inMemoryRecipientRepository.create(recipient)
@@ -47,7 +47,7 @@ describe('Delete Recipient', () => {
 
     const result = await sut.execute({
       recipientId: recipient.id.toString(),
-      password: 'wrong-password'
+      password: 'wrong-password',
     })
 
     // verificações

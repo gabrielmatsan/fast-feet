@@ -1,13 +1,12 @@
-import  { InMemoryDeliveryManRepository } from "test/repositories/in-memory-delivery-man-repository"
-import  { CreateDeliveryManUseCase } from "./create-delivery-man"
-import { makeDeliveryMan } from "test/factories/make-delivery-man-factory"
-
+import { InMemoryDeliveryManRepository } from 'test/repositories/in-memory-delivery-man-repository'
+import { CreateDeliveryManUseCase } from './create-delivery-man'
+import { makeDeliveryMan } from 'test/factories/make-delivery-man-factory'
 
 let sut: CreateDeliveryManUseCase
 let inMemoryDeliveryManRepository: InMemoryDeliveryManRepository
 
 describe('Create Delivery Man', () => {
-  beforeEach(()=>{
+  beforeEach(() => {
     inMemoryDeliveryManRepository = new InMemoryDeliveryManRepository()
     sut = new CreateDeliveryManUseCase(inMemoryDeliveryManRepository)
   })
@@ -21,7 +20,7 @@ describe('Create Delivery Man', () => {
       password: deliveryMan.password,
       phone: deliveryMan.phone,
       deliveryManLatitude: deliveryMan.deliveryManLatitude,
-      deliveryManLongitude: deliveryMan.deliveryManLongitude
+      deliveryManLongitude: deliveryMan.deliveryManLongitude,
     })
 
     expect(result.isRight()).toBe(true)
@@ -39,7 +38,7 @@ describe('Create Delivery Man', () => {
       password: deliveryMan.password,
       phone: deliveryMan.phone,
       deliveryManLatitude: deliveryMan.deliveryManLatitude,
-      deliveryManLongitude: deliveryMan.deliveryManLongitude
+      deliveryManLongitude: deliveryMan.deliveryManLongitude,
     })
 
     expect(result.isLeft()).toBe(true)

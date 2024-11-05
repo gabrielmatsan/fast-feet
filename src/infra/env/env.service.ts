@@ -1,7 +1,6 @@
-import { Injectable } from "@nestjs/common"; 
-import { ConfigService } from "@nestjs/config";
-import { Env } from "./env"; 
-
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { Env } from './env'
 
 @Injectable()
 export class EnvService {
@@ -15,6 +14,6 @@ export class EnvService {
    */
   get<T extends keyof Env>(key: T) {
     // Usa o ConfigService para obter o valor da variável de ambiente e infere automaticamente o tipo do retorno.
-    return this.configService.get(key, { infer: true });
+    return this.configService.get(key, { infer: true })
   }
 }

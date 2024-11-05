@@ -1,25 +1,30 @@
-import { DeliveryManRepository } from "@/domain/delivery/application/repositories/delivery-man-repository";
-import { DeliveryMan } from "@/domain/delivery/enterprise/entities/delivery-man";
-import { Order } from "@/domain/delivery/enterprise/entities/order";
-import { InMemoryOrderRepository } from "./in-memory-order-repository";
-import { Coordinate, getDistanceBetweenCoordinates } from "test/utils/get-distance-between-coordinates";
+import { DeliveryManRepository } from '@/domain/delivery/application/repositories/delivery-man-repository'
+import { DeliveryMan } from '@/domain/delivery/enterprise/entities/delivery-man'
+import { Order } from '@/domain/delivery/enterprise/entities/order'
+import { InMemoryOrderRepository } from './in-memory-order-repository'
+import {
+  Coordinate,
+  getDistanceBetweenCoordinates,
+} from 'test/utils/get-distance-between-coordinates'
 
-export class InMemoryDeliveryManRepository implements DeliveryManRepository{
-
+export class InMemoryDeliveryManRepository implements DeliveryManRepository {
   public items: DeliveryMan[] = []
   async create(deliveryman: DeliveryMan) {
     this.items.push(deliveryman)
   }
+
   async update(deliveryman: DeliveryMan): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === deliveryman.id)
 
     this.items[itemIndex] = deliveryman
   }
+
   async delete(deliveryman: DeliveryMan): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === deliveryman.id)
 
     this.items.splice(itemIndex, 1)
   }
+
   async findById(id: string) {
     const deliveryMan = this.items.find((item) => item.id.toString() === id)
 

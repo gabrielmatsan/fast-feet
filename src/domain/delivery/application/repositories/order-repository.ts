@@ -1,4 +1,4 @@
-import { Order } from "../../enterprise/entities/order";
+import { Order } from '../../enterprise/entities/order'
 
 export interface findManyNearbyParams {
   latitude: number

@@ -1,5 +1,5 @@
 export class DeliveryManAlreadyExistsError extends Error {
-  constructor(){
+  constructor() {
     super('Delivery man already exists')
   }
 }

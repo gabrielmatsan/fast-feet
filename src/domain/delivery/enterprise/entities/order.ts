@@ -1,11 +1,10 @@
-import { AggregateRoot } from "@/core/entities/aggregate-root"
-import { UniqueEntityId } from "@/core/entities/unique-entity-id"
-import { Optional } from "@/core/types/optional"
-import { OrderAttachmentList } from "./attachment-order-list"
-import { OrderDeliveredEvent } from "../events/order-delivered-event"
-import { OrderReturnedEvent } from "../events/order-returned-event"
-import { OrderInTransitEvent } from "../events/order-in-transit-event"
-
+import { AggregateRoot } from '@/core/entities/aggregate-root'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import { OrderAttachmentList } from './attachment-order-list'
+import { OrderDeliveredEvent } from '../events/order-delivered-event'
+import { OrderReturnedEvent } from '../events/order-returned-event'
+import { OrderInTransitEvent } from '../events/order-in-transit-event'
 
 export interface OrderProps {
   recipientId: UniqueEntityId
@@ -17,7 +16,7 @@ export interface OrderProps {
   status: OrderStatus
   isRemovable: boolean
   paymentMethod: string
-  
+
   createdAt: Date
   updatedAt?: Date | null
   expectedDeliveryDate?: Date | null
@@ -30,27 +29,45 @@ export interface OrderProps {
   shipping: number
 }
 
-export type OrderStatus = 'pending' | 'awaiting' | 'inTransit' | 'delivered' | 'returned';
+export type OrderStatus =
+  | 'pending'
+  | 'awaiting'
+  | 'inTransit'
+  | 'delivered'
+  | 'returned'
 
 export class Order extends AggregateRoot<OrderProps> {
-  static create(props: Optional<OrderProps, 'createdAt' | 'status' | 'deliveryManId'|'expectedDeliveryDate' | 'attachments'>, id?: UniqueEntityId) {
-    const order = new Order({...props,
-      createdAt: new Date(),
-      status: props.status ?? 'pending',
-      deliveryManId: props.deliveryManId ?? null,
-      expectedDeliveryDate: props.expectedDeliveryDate ?? null,
-      attachments: props.attachments ?? new OrderAttachmentList(),
-    },
-     id)
+  static create(
+    props: Optional<
+      OrderProps,
+      | 'createdAt'
+      | 'status'
+      | 'deliveryManId'
+      | 'expectedDeliveryDate'
+      | 'attachments'
+    >,
+    id?: UniqueEntityId,
+  ) {
+    const order = new Order(
+      {
+        ...props,
+        createdAt: new Date(),
+        status: props.status ?? 'pending',
+        deliveryManId: props.deliveryManId ?? null,
+        expectedDeliveryDate: props.expectedDeliveryDate ?? null,
+        attachments: props.attachments ?? new OrderAttachmentList(),
+      },
+      id,
+    )
 
     return order
   }
 
-  get recipientId(){
+  get recipientId() {
     return this.props.recipientId
   }
 
-  get deliveryManId(){
+  get deliveryManId() {
     return this.props.deliveryManId ?? null
   }
 
@@ -59,65 +76,65 @@ export class Order extends AggregateRoot<OrderProps> {
     this.touch()
   }
 
-  get addressId(){
+  get addressId() {
     return this.props.addressId
   }
 
-  get paymentMethod(){
+  get paymentMethod() {
     return this.props.paymentMethod
   }
 
-  get status(){
+  get status() {
     return this.props.status
   }
 
-  get isRemovable(){
+  get isRemovable() {
     return this.props.isRemovable
   }
 
-  set isRemovable(isRemovable: boolean){
+  set isRemovable(isRemovable: boolean) {
     this.props.isRemovable = isRemovable
     this.touch()
   }
 
-  get createdAt(){
+  get createdAt() {
     return this.props.createdAt
   }
 
-  get updatedAt(){
+  get updatedAt() {
     return this.props.updatedAt
   }
 
-  get expectedDeliveryDate(){
+  get expectedDeliveryDate() {
     return this.props.expectedDeliveryDate ?? null
   }
 
   set expectedDeliveryDate(date: Date | null) {
-    this.props.expectedDeliveryDate = date;
-    this.touch();
+    this.props.expectedDeliveryDate = date
+    this.touch()
   }
-  
-  get shipping(){
+
+  get shipping() {
     return this.props.shipping
   }
 
-  get title(){
+  get title() {
     return this.props.title
   }
 
-  get content(){
+  get content() {
     return this.props.content
   }
 
-  get deliveryLatitude(){
+  get deliveryLatitude() {
     return this.props.deliveryLatitude
   }
 
-  get deliveryLongitude(){
+  get deliveryLongitude() {
     return this.props.deliveryLongitude
   }
 
-  get attachments(){
+  get attachments() {
     return this.props.attachments
   }
 
@@ -126,35 +143,35 @@ export class Order extends AggregateRoot<OrderProps> {
     this.touch()
   }
 
-  private touch(){
+  private touch() {
     this.props.updatedAt = new Date()
   }
 
   markAsAwaiting() {
-    this.props.status = 'awaiting';
-    this.touch();
+    this.props.status = 'awaiting'
+    this.touch()
   }
 
   markAsInTransit() {
-    this.props.status = 'inTransit';
-    this.touch();
+    this.props.status = 'inTransit'
+    this.touch()
     this.addDomainEvent(new OrderInTransitEvent(this))
   }
 
   markAsDelivered() {
-    this.props.status = 'delivered';
+    this.props.status = 'delivered'
     this.addDomainEvent(new OrderDeliveredEvent(this))
-    this.touch();
+    this.touch()
   }
 
   markAsReturned() {
-    this.props.status = 'returned';
-    this.touch();
+    this.props.status = 'returned'
+    this.touch()
     this.addDomainEvent(new OrderReturnedEvent(this))
   }
 
   assignToDeliveryMan(deliveryManId: UniqueEntityId) {
-    this.props.deliveryManId = deliveryManId;
-    this.markAsInTransit();
+    this.props.deliveryManId = deliveryManId
+    this.markAsInTransit()
   }
 }

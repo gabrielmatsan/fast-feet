@@ -1,5 +1,5 @@
 export class RecipientAlreadyExistsError extends Error {
-  constructor(){
+  constructor() {
     super('Recipient already exists')
   }
 }

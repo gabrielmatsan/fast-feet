@@ -1,32 +1,37 @@
-import { Either, left, right } from "@/core/either"
-import { RecipientRepository } from "../repositories/recipient-repository"
-import { WrongCredentialsError } from "./error/wrong-credentials-error"
-import { HashCompare } from "../../criptography/hash-compare"
+import { Either, left, right } from '@/core/either'
+import { RecipientRepository } from '../repositories/recipient-repository'
+import { WrongCredentialsError } from './error/wrong-credentials-error'
+import { HashCompare } from '../../criptography/hash-compare'
 
 export interface DeleteRecipientRequest {
   recipientId: string
   password: string
 }
 
-type DeleteRecipientResponse = Either<WrongCredentialsError,null>
+type DeleteRecipientResponse = Either<WrongCredentialsError, null>
 
 export class DeleteRecipientUseCase {
   constructor(
     private recipientRepository: RecipientRepository,
-    private hashComparer: HashCompare
-  ){}
+    private hashComparer: HashCompare,
+  ) {}
 
-  async execute({ recipientId, password }: DeleteRecipientRequest): Promise<DeleteRecipientResponse> {
-
+  async execute({
+    recipientId,
+    password,
+  }: DeleteRecipientRequest): Promise<DeleteRecipientResponse> {
     const recipient = await this.recipientRepository.findById(recipientId)
 
-    if(!recipient) {
+    if (!recipient) {
       return left(new WrongCredentialsError())
     }
 
-    const isPasswordValid = await this.hashComparer.compare(password, recipient.password)
+    const isPasswordValid = await this.hashComparer.compare(
+      password,
+      recipient.password,
+    )
 
-    if(!isPasswordValid) {
+    if (!isPasswordValid) {
       return left(new WrongCredentialsError())
     }
 

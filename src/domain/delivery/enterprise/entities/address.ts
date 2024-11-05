@@ -1,8 +1,8 @@
-import { Entity } from "@/core/entities/entity"
-import  { UniqueEntityId } from "@/core/entities/unique-entity-id"
-import  { Optional } from "@/core/types/optional"
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
-export interface AddressProps{
+export interface AddressProps {
   recipientId: UniqueEntityId
   street: string
   number: string
@@ -15,17 +15,17 @@ export interface AddressProps{
   longitude: number
 }
 
-
-export class Address extends Entity<AddressProps>{
-  
-  static create(props:Optional<AddressProps, 'complement'>, id?: UniqueEntityId):Address{
+export class Address extends Entity<AddressProps> {
+  static create(
+    props: Optional<AddressProps, 'complement'>,
+    id?: UniqueEntityId,
+  ): Address {
     const complementProps = {
       ...props,
-      complement: props.complement ?? null
+      complement: props.complement ?? null,
     }
 
     return new Address(complementProps, id)
-
   }
 
   get street() {

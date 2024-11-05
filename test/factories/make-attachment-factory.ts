@@ -1,6 +1,9 @@
-import { UniqueEntityId } from "@/core/entities/unique-entity-id"
-import { Attachment, AttachmentProps } from "@/domain/delivery/enterprise/entities/attachment"
-import { faker } from "@faker-js/faker"
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import {
+  Attachment,
+  AttachmentProps,
+} from '@/domain/delivery/enterprise/entities/attachment'
+import { faker } from '@faker-js/faker'
 
 export function makeAttachment(
   override: Partial<AttachmentProps> = {},

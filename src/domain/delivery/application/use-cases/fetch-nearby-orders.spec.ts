@@ -1,13 +1,13 @@
-import { Order } from "@/domain/delivery/enterprise/entities/order"
-import { DeliveryMan } from "@/domain/delivery/enterprise/entities/delivery-man"
-import { UniqueEntityId } from "@/core/entities/unique-entity-id"
-import { makeDeliveryMan } from "test/factories/make-delivery-man-factory"
-import { makeOrder } from "test/factories/make-order-factory"
-import { InMemoryOrderRepository } from "test/repositories/in-memory-order-repository"
-import { InMemoryDeliveryManRepository } from "test/repositories/in-memory-delivery-man-repository"
-import { FetchNearbyOrdersUseCase } from "./fetch-nearby-orders"
+import { Order } from '@/domain/delivery/enterprise/entities/order'
+import { DeliveryMan } from '@/domain/delivery/enterprise/entities/delivery-man'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { makeDeliveryMan } from 'test/factories/make-delivery-man-factory'
+import { makeOrder } from 'test/factories/make-order-factory'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryDeliveryManRepository } from 'test/repositories/in-memory-delivery-man-repository'
+import { FetchNearbyOrdersUseCase } from './fetch-nearby-orders'
 
-describe("Fetch Nearby Orders UseCase", () => {
+describe('Fetch Nearby Orders UseCase', () => {
   let orderRepository: InMemoryOrderRepository
   let deliveryManRepository: InMemoryDeliveryManRepository
   let sut: FetchNearbyOrdersUseCase
@@ -18,14 +18,14 @@ describe("Fetch Nearby Orders UseCase", () => {
     sut = new FetchNearbyOrdersUseCase(orderRepository, deliveryManRepository)
   })
 
-  it("should be returning nearby orders", async () => {
+  it('should be returning nearby orders', async () => {
     const order1 = makeOrder({
-      deliveryLatitude:1.4483454,
-      deliveryLongitude:-48.4835328
+      deliveryLatitude: 1.4483454,
+      deliveryLongitude: -48.4835328,
     })
     const order2 = makeOrder({
-      deliveryLatitude:60.4483454,
-      deliveryLongitude:-60.4835328
+      deliveryLatitude: 60.4483454,
+      deliveryLongitude: -60.4835328,
     })
 
     await orderRepository.create(order1)
@@ -33,7 +33,7 @@ describe("Fetch Nearby Orders UseCase", () => {
 
     const deliveryMan = makeDeliveryMan({
       deliveryManLatitude: order1.deliveryLatitude,
-      deliveryManLongitude: order1.deliveryLongitude
+      deliveryManLongitude: order1.deliveryLongitude,
     })
     await deliveryManRepository.create(deliveryMan)
 
@@ -42,7 +42,7 @@ describe("Fetch Nearby Orders UseCase", () => {
       deliveryManId: deliveryMan.id.toString(),
       deliveryManlatitude: deliveryMan.deliveryManLatitude,
       deliveryManlongitude: deliveryMan.deliveryManLongitude,
-      maxDistance: 100
+      maxDistance: 100,
     })
 
     // Verifica o resultado

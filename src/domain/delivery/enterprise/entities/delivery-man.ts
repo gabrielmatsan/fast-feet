@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entities/entity"
-import  { UniqueEntityId } from "@/core/entities/unique-entity-id"
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
 export interface DeliveryManProps {
   cpf: string
@@ -11,7 +11,7 @@ export interface DeliveryManProps {
 }
 
 export class DeliveryMan extends Entity<DeliveryManProps> {
-  static create(props: DeliveryManProps, id?:UniqueEntityId) {
+  static create(props: DeliveryManProps, id?: UniqueEntityId) {
     const deliveryMan = new DeliveryMan(props, id)
 
     return deliveryMan

@@ -1,8 +1,8 @@
-import { Either, left, right } from "@/core/either"
-import { Recipient } from "../../enterprise/entities/recipient"
-import { RecipientRepository } from "../repositories/recipient-repository"
-import { RecipientAlreadyExistsError } from "./error/recipient-already-exists-error"
-import { HashGenerator } from "../../criptography/hash-generator"
+import { Either, left, right } from '@/core/either'
+import { Recipient } from '../../enterprise/entities/recipient'
+import { RecipientRepository } from '../repositories/recipient-repository'
+import { RecipientAlreadyExistsError } from './error/recipient-already-exists-error'
+import { HashGenerator } from '../../criptography/hash-generator'
 
 export interface CreateRecipientRequest {
   name: string
@@ -12,24 +12,36 @@ export interface CreateRecipientRequest {
   phone: string
 }
 
-type CreateRecipientResponse = Either<RecipientAlreadyExistsError,{
-  recipient: Recipient
-}>
+type CreateRecipientResponse = Either<
+  RecipientAlreadyExistsError,
+  {
+    recipient: Recipient
+  }
+>
 
-export class CreateRecipientUseCase{
+export class CreateRecipientUseCase {
+  constructor(
+    private recipientRepository: RecipientRepository,
+    private hashGenerator: HashGenerator,
+  ) {}
 
-  constructor(private recipientRepository: RecipientRepository, private hashGenerator:HashGenerator){}
-
-  async execute({name,cpf,email,password,phone}:CreateRecipientRequest): Promise<CreateRecipientResponse>{
+  async execute({
+    name,
+    cpf,
+    email,
+    password,
+    phone,
+  }: CreateRecipientRequest): Promise<CreateRecipientResponse> {
     const isCpfAlreadyExists = await this.recipientRepository.findByCpf(cpf)
 
-    if(isCpfAlreadyExists){
+    if (isCpfAlreadyExists) {
       return left(new RecipientAlreadyExistsError())
     }
 
-    const isEmailAlreadyExists = await this.recipientRepository.findByEmail(email)
+    const isEmailAlreadyExists =
+      await this.recipientRepository.findByEmail(email)
 
-    if(isEmailAlreadyExists){
+    if (isEmailAlreadyExists) {
       return left(new RecipientAlreadyExistsError())
     }
 
@@ -40,11 +52,11 @@ export class CreateRecipientUseCase{
       cpf,
       email,
       phone,
-      password: hashedPassword
+      password: hashedPassword,
     })
 
     await this.recipientRepository.create(recipient)
 
-    return right({recipient})
-  } 
+    return right({ recipient })
+  }
 }

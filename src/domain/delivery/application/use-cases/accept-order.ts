@@ -1,7 +1,7 @@
-import { Either, left, right } from "@/core/either"
-import { ResourceNotFoundError } from "./error/resource-not-found-error"
-import { DeliveryManRepository } from "../repositories/delivery-man-repository"
-import { OrderRepository } from "../repositories/order-repository"
+import { Either, left, right } from '@/core/either'
+import { ResourceNotFoundError } from './error/resource-not-found-error'
+import { DeliveryManRepository } from '../repositories/delivery-man-repository'
+import { OrderRepository } from '../repositories/order-repository'
 
 export interface AcceptOrderRequest {
   orderId: string
@@ -10,14 +10,16 @@ export interface AcceptOrderRequest {
 
 type AcceptOrderResponse = Either<ResourceNotFoundError, null>
 
-
 export class AcceptOrderUseCase {
   constructor(
     private deliveryManRepository: DeliveryManRepository,
-    private orderRepository: OrderRepository
+    private orderRepository: OrderRepository,
   ) {}
 
-  async execute({ orderId, deliveryManId }: AcceptOrderRequest): Promise<AcceptOrderResponse> {
+  async execute({
+    orderId,
+    deliveryManId,
+  }: AcceptOrderRequest): Promise<AcceptOrderResponse> {
     const order = await this.orderRepository.findByOrderId(orderId)
 
     if (!order) {

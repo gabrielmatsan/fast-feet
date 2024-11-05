@@ -1,9 +1,9 @@
-import { Either, left, right } from "@/core/either"
-import { DeliveryMan } from "../../enterprise/entities/delivery-man"
-import { DeliveryManRepository } from "../repositories/delivery-man-repository"
-import { DeliveryManAlreadyExistsError } from "./error/delivery-man-already-exists-error"
+import { Either, left, right } from '@/core/either'
+import { DeliveryMan } from '../../enterprise/entities/delivery-man'
+import { DeliveryManRepository } from '../repositories/delivery-man-repository'
+import { DeliveryManAlreadyExistsError } from './error/delivery-man-already-exists-error'
 
-export interface CreateDeliveryManRequest{
+export interface CreateDeliveryManRequest {
   cpf: string
   name: string
   password: string
@@ -12,20 +12,30 @@ export interface CreateDeliveryManRequest{
   deliveryManLongitude: number
 }
 
-type CreateDeliveryManResponse = Either<DeliveryManAlreadyExistsError,{
-  deliveryMan:DeliveryMan
-}>
+type CreateDeliveryManResponse = Either<
+  DeliveryManAlreadyExistsError,
+  {
+    deliveryMan: DeliveryMan
+  }
+>
 
-export class CreateDeliveryManUseCase{
-  constructor(private deliveryManRepository: DeliveryManRepository){}
+export class CreateDeliveryManUseCase {
+  constructor(private deliveryManRepository: DeliveryManRepository) {}
 
-  async execute({cpf,name,password,phone,deliveryManLatitude,deliveryManLongitude}:CreateDeliveryManRequest): Promise<CreateDeliveryManResponse>{
-
+  async execute({
+    cpf,
+    name,
+    password,
+    phone,
+    deliveryManLatitude,
+    deliveryManLongitude,
+  }: CreateDeliveryManRequest): Promise<CreateDeliveryManResponse> {
     // verifica se o destinatario ja existe
-    const isDeliveryManAlreadyExists = await this.deliveryManRepository.findByCpf(cpf)
+    const isDeliveryManAlreadyExists =
+      await this.deliveryManRepository.findByCpf(cpf)
 
     // se existe retorna erro
-    if(isDeliveryManAlreadyExists){
+    if (isDeliveryManAlreadyExists) {
       return left(new DeliveryManAlreadyExistsError())
     }
 
@@ -36,13 +46,13 @@ export class CreateDeliveryManUseCase{
       password,
       phone,
       deliveryManLatitude,
-      deliveryManLongitude
+      deliveryManLongitude,
     })
 
     // salva o destinatario
     await this.deliveryManRepository.create(deliveryMan)
 
     // retorna o destinatario criado
-    return right({deliveryMan})
+    return right({ deliveryMan })
   }
 }

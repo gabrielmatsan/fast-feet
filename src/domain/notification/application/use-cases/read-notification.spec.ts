@@ -3,7 +3,6 @@ import { ReadNotificationUseCase } from './read-notification'
 import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notification-repository'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
-
 let inMemoryNotificationsRepository: InMemoryNotificationsRepository
 let sut: ReadNotificationUseCase
 

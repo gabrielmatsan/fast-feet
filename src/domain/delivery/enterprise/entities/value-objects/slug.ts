@@ -1,21 +1,21 @@
-import { ValueObject } from "@/core/entities/value-object";
+import { ValueObject } from '@/core/entities/value-object'
 
 export interface SlugProps {
-  value: string;
+  value: string
 }
 
 export class Slug extends ValueObject<SlugProps> {
   get value(): string {
-    return this.props.value;
+    return this.props.value
   }
 
   private constructor(props: SlugProps) {
-    super(props);
+    super(props)
   }
 
   // Método create que recebe diretamente uma string como valor
   static create(slug: string): Slug {
-    return new Slug({ value: slug });
+    return new Slug({ value: slug })
   }
 
   /**
@@ -30,12 +30,12 @@ export class Slug extends ValueObject<SlugProps> {
       .normalize('NFKD')
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, '-')         // Substitui espaços por hífens
-      .replace(/[^\w-]/g, '')       // Remove caracteres não permitidos
-      .replace(/_/g, '-')           // Substitui sublinhados por hífens
-      .replace(/--+/g, '-')         // Remove hífens duplos consecutivos
-      .replace(/-$/g, '');          // Remove hífens no final
+      .replace(/\s+/g, '-') // Substitui espaços por hífens
+      .replace(/[^\w-]/g, '') // Remove caracteres não permitidos
+      .replace(/_/g, '-') // Substitui sublinhados por hífens
+      .replace(/--+/g, '-') // Remove hífens duplos consecutivos
+      .replace(/-$/g, '') // Remove hífens no final
 
-    return Slug.create(slugText);
+    return Slug.create(slugText)
   }
 }
