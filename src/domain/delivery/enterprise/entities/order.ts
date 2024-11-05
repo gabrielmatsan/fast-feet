@@ -1,6 +1,7 @@
 import { AggregateRoot } from "@/core/entities/aggregate-root"
 import { UniqueEntityId } from "@/core/entities/unique-entity-id"
 import { Optional } from "@/core/types/optional"
+import { OrderAttachmentList } from "./attachment-order-list"
 
 
 export interface OrderProps {
@@ -21,6 +22,8 @@ export interface OrderProps {
   deliveryLatitude: number
   deliveryLongitude: number
 
+  attachments: OrderAttachmentList
+
   shipping: number
 }
 
@@ -28,12 +31,13 @@ export type OrderStatus = 'pending' | 'awaiting' | 'inTransit' | 'delivered' | '
 
 
 export class Order extends AggregateRoot<OrderProps> {
-  static create(props: Optional<OrderProps, 'createdAt' | 'status' | 'deliveryManId'|'expectedDeliveryDate'>, id?: UniqueEntityId) {
+  static create(props: Optional<OrderProps, 'createdAt' | 'status' | 'deliveryManId'|'expectedDeliveryDate' | 'attachments'>, id?: UniqueEntityId) {
     const order = new Order({...props,
       createdAt: new Date(),
       status: props.status ?? 'pending',
       deliveryManId: props.deliveryManId ?? null,
       expectedDeliveryDate: props.expectedDeliveryDate ?? null,
+      attachments: props.attachments ?? new OrderAttachmentList(),
     },
      id)
 
@@ -109,6 +113,15 @@ export class Order extends AggregateRoot<OrderProps> {
 
   get deliveryLongitude(){
     return this.props.deliveryLongitude
+  }
+
+  get attachments(){
+    return this.props.attachments
+  }
+
+  set attachments(attachments: OrderAttachmentList) {
+    this.props.attachments = attachments
+    this.touch()
   }
 
   private touch(){

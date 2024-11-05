@@ -31,6 +31,7 @@ export class AcceptOrderUseCase {
     }
 
     order.deliveryManId = deliveryMan.id
+    order.markAsAwaiting()
 
     await this.orderRepository.update(order)
 

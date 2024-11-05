@@ -1,43 +1,39 @@
 import { InMemoryOrderRepository } from "test/repositories/in-memory-order-repository"
-import { InMemoryDeliveryManRepository } from "test/repositories/in-memory-delivery-man-repository"
-import { AcceptOrderUseCase } from "./accept-order"
 import { makeOrder } from "test/factories/make-order-factory"
 import { makeDeliveryMan } from "test/factories/make-delivery-man-factory"
+import { OrderReturnedUseCase } from "./order-returned"
 import { InMemoryOrderAttachmentsRepository } from "test/repositories/in-memory-order-attachments-repository"
 
 let inMemoryOrderRepository: InMemoryOrderRepository
 let inMemoryOrderAttachmentsRepository: InMemoryOrderAttachmentsRepository
-let inMemoryDeliveryManRepository: InMemoryDeliveryManRepository
 
-let sut: AcceptOrderUseCase
-
-describe('Accept Order', () => {
+let sut: OrderReturnedUseCase
+describe('Order Returned Use Case', () => {
   beforeEach(()=>{
 
     inMemoryOrderAttachmentsRepository = new InMemoryOrderAttachmentsRepository()
     inMemoryOrderRepository = new InMemoryOrderRepository(inMemoryOrderAttachmentsRepository)
 
-    inMemoryDeliveryManRepository = new InMemoryDeliveryManRepository()
-
-    sut = new AcceptOrderUseCase(inMemoryDeliveryManRepository,inMemoryOrderRepository)
+    sut = new OrderReturnedUseCase(inMemoryOrderRepository)
   })
 
-  it('should be able to create a recipient', async () => {
-    // crio o destinatario
-    const order = makeOrder()
-    inMemoryOrderRepository.create(order)
+  it('should be able to mark an order as returned', async () => {
 
-    // crio o entregador
     const deliveryMan = makeDeliveryMan()
-    inMemoryDeliveryManRepository.create(deliveryMan)
+    
+    const order = makeOrder({
+      deliveryManId: deliveryMan.id,
+      status: 'inTransit'
+    })
+    inMemoryOrderRepository.create(order)
 
     const result = await sut.execute({
       orderId: order.id.toString(),
       deliveryManId: deliveryMan.id.toString()
     })
 
-    // verificações
     expect(result.isRight()).toBe(true)
-    expect(inMemoryOrderRepository.items[0].deliveryManId).toEqual(deliveryMan.id)
+    expect(inMemoryOrderRepository.items).toHaveLength(1)
+    expect(inMemoryOrderRepository.items[0].status).toEqual('returned')
   })
 })
