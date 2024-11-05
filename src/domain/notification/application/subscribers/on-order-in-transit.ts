@@ -1,9 +1,9 @@
 import { DomainEvents } from "@/core/events/domain-events";
 import { EventHandler } from "@/core/events/event-handler";
-import { OrderDeliveredEvent } from "@/domain/delivery/enterprise/events/order-delivered-event";
+import { OrderInTransitEvent } from "@/domain/delivery/enterprise/events/order-in-transit-event";
 import { SendNotificationUseCase } from "../use-cases/send-notification";
 
-export class OnOrderDelivered implements EventHandler{
+export class OnOrderInTransit implements EventHandler{
   constructor(
     private sendNotification: SendNotificationUseCase
   ){
@@ -12,16 +12,15 @@ export class OnOrderDelivered implements EventHandler{
   setupSubscriptions(): void {
     DomainEvents.register(
       this.sendNewOrderNotification.bind(this),
-      OrderDeliveredEvent.name
+      OrderInTransitEvent.name
     )
   }
 
-  private async sendNewOrderNotification({order}:OrderDeliveredEvent){
-    console.log(`Order ${order.id} delivered`)
-
+  private async sendNewOrderNotification({order}:OrderInTransitEvent){
+    
     await this.sendNotification.execute({
       recipientId: order.recipientId.toString(),
-      title: `Order "${order.id}" delivered`
+      title: `Order "${order.id}" in transit`
     })
   }
 

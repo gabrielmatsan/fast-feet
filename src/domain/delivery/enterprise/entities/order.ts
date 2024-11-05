@@ -3,6 +3,8 @@ import { UniqueEntityId } from "@/core/entities/unique-entity-id"
 import { Optional } from "@/core/types/optional"
 import { OrderAttachmentList } from "./attachment-order-list"
 import { OrderDeliveredEvent } from "../events/order-delivered-event"
+import { OrderReturnedEvent } from "../events/order-returned-event"
+import { OrderInTransitEvent } from "../events/order-in-transit-event"
 
 
 export interface OrderProps {
@@ -29,7 +31,6 @@ export interface OrderProps {
 }
 
 export type OrderStatus = 'pending' | 'awaiting' | 'inTransit' | 'delivered' | 'returned';
-
 
 export class Order extends AggregateRoot<OrderProps> {
   static create(props: Optional<OrderProps, 'createdAt' | 'status' | 'deliveryManId'|'expectedDeliveryDate' | 'attachments'>, id?: UniqueEntityId) {
@@ -137,6 +138,7 @@ export class Order extends AggregateRoot<OrderProps> {
   markAsInTransit() {
     this.props.status = 'inTransit';
     this.touch();
+    this.addDomainEvent(new OrderInTransitEvent(this))
   }
 
   markAsDelivered() {
@@ -148,6 +150,7 @@ export class Order extends AggregateRoot<OrderProps> {
   markAsReturned() {
     this.props.status = 'returned';
     this.touch();
+    this.addDomainEvent(new OrderReturnedEvent(this))
   }
 
   assignToDeliveryMan(deliveryManId: UniqueEntityId) {
