@@ -1,5 +1,4 @@
 import { Entity } from '@/core/entities/entity'
-import { Address } from './address'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
 export interface RecipientProps {

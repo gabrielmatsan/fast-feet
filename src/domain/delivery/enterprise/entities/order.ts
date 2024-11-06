@@ -6,6 +6,13 @@ import { OrderDeliveredEvent } from '../events/order-delivered-event'
 import { OrderReturnedEvent } from '../events/order-returned-event'
 import { OrderInTransitEvent } from '../events/order-in-transit-event'
 
+export type OrderStatus =
+  | 'pending'
+  | 'awaiting'
+  | 'inTransit'
+  | 'delivered'
+  | 'returned'
+
 export interface OrderProps {
   recipientId: UniqueEntityId
   deliveryManId?: UniqueEntityId | null
@@ -28,13 +35,6 @@ export interface OrderProps {
 
   shipping: number
 }
-
-export type OrderStatus =
-  | 'pending'
-  | 'awaiting'
-  | 'inTransit'
-  | 'delivered'
-  | 'returned'
 
 export class Order extends AggregateRoot<OrderProps> {
   static create(

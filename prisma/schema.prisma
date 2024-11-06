@@ -7,4 +7,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Recipient {
+  id       String  @id @default(uuid())
+  cpf      String  @unique
+  email    String  @unique
+  name     String
+  phone    String
+  password String
+  orders   Order[]
 
+  @@map("recipients")
+}
+
+model DeliveryMan {
+  id        String  @id @default(uuid())
+  cpf       String  @unique
+  name      String
+  phone     String
+  latitude  Decimal
+  longitude Decimal
+  orders    Order[]
+
+  @@map("delivery_mens")
+}
+
+model Address {
+  id           String  @id @default(uuid())
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  zipcode      String
+  latitude     Decimal
+  longitude    Decimal
+  orders       Order[]
+
+  @@map("addresses")
+}
+
+enum OrderStatus {
+  pending
+  awaiting
+  inTransit
+  delivered
+  returned
+}
+
+model Order {
+  id                   String      @id @default(uuid())
+  recipientId          String      @map("recipient_id")
+  deliveryManId        String?     @map("delivery_man_id")
+  addressId            String      @map("address_id")
+  status               OrderStatus
+  isRemovable          Boolean     @map("is_removable")
+  createdAt            DateTime    @default(now()) @map("created_at")
+  updatedAt            DateTime?   @updatedAt @map("updated_at")
+  expectedDeliveryDate DateTime?   @map("expect_delivery_date")
+  deliveryLatitude     Float       @map("delivery_latitude")
+  deliveryLongitude    Float       @map("delivery_longitude")
+  shipping             Float
+
+  recipient Recipient    @relation(fields: [recipientId], references: [id])
+  delivery  DeliveryMan? @relation(fields: [deliveryManId], references: [id])
+  address   Address      @relation(fields: [addressId], references: [id])
+
+  @@map("orders")
+}
