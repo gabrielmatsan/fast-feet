@@ -30,10 +30,9 @@ export interface OrderProps {
 
   deliveryLatitude: number
   deliveryLongitude: number
+  shipping: number
 
   attachments: OrderAttachmentList
-
-  shipping: number
 }
 
 export class Order extends AggregateRoot<OrderProps> {

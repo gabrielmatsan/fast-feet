@@ -8,14 +8,15 @@ datasource db {
 }
 
 model Recipient {
-  id        String    @id @default(uuid())
-  cpf       String    @unique
-  email     String    @unique
-  name      String
-  phone     String
-  password  String
-  orders    Order[]
-  addresses Address[]
+  id           String         @id @default(uuid())
+  cpf          String         @unique
+  email        String         @unique
+  name         String
+  phone        String
+  password     String
+  orders       Order[]
+  addresses    Address[]
+  notifications Notification[]
 
   @@map("recipients")
 }
@@ -65,8 +66,11 @@ model Order {
   recipientId          String      @map("recipient_id")
   deliveryManId        String?     @map("delivery_man_id")
   addressId            String      @map("address_id")
+  title                String
+  content              String
   status               OrderStatus
   isRemovable          Boolean     @map("is_removable")
+  paymentMethod        String      @map("payment_method")
   createdAt            DateTime    @default(now()) @map("created_at")
   updatedAt            DateTime?   @updatedAt @map("updated_at")
   expectedDeliveryDate DateTime?   @map("expect_delivery_date")
@@ -74,9 +78,33 @@ model Order {
   deliveryLongitude    Float       @map("delivery_longitude")
   shipping             Float
 
-  recipient Recipient    @relation(fields: [recipientId], references: [id])
-  delivery  DeliveryMan? @relation(fields: [deliveryManId], references: [id])
-  address   Address      @relation(fields: [addressId], references: [id])
+  recipient  Recipient    @relation(fields: [recipientId], references: [id])
+  delivery   DeliveryMan? @relation(fields: [deliveryManId], references: [id])
+  address    Address      @relation(fields: [addressId], references: [id])
+  attachments Attachment[]
 
   @@map("orders")
+}
+
+model Attachment {
+  id      String @id @default(uuid())
+  title   String
+  url     String
+  orderId String @map("order_id")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("attachments")
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  recipientId String
+  title     String
+  content   String
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  recipient   Recipient @relation(fields: [recipientId], references: [id])
+  @@map("notifications")
 }

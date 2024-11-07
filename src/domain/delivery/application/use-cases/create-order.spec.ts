@@ -1,21 +1,25 @@
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { makeRecipient } from 'test/factories/make-recipient-factory'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { InMemoryDeliveryManRepository } from 'test/repositories/in-memory-delivery-man-repository'
 import { CreateOrderUseCase } from './create-order'
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 import { makeAddress } from 'test/factories/make-address-factory'
+import { InMemoryOrderAttachmentsRepository } from 'test/repositories/in-memory-order-attachments-repository'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let inMemoryAddressRepository: InMemoryAddressRepository
+let inMemoryOrderAttachmentsRepository: InMemoryOrderAttachmentsRepository
 
 let sut: CreateOrderUseCase
 describe('Create Recipient', () => {
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryOrderAttachmentsRepository =
+      new InMemoryOrderAttachmentsRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryOrderAttachmentsRepository,
+    )
 
     inMemoryAddressRepository = new InMemoryAddressRepository(
       inMemoryRecipientRepository,
@@ -50,12 +54,10 @@ describe('Create Recipient', () => {
       status: 'pending',
       isRemovable: false,
       paymentMethod: 'credit_card',
-      expectedDeliveryDate: null,
       shipping: 0,
       deliveryLatitude: 0,
       deliveryLongitude: 0,
     })
-
     expect(result.isRight()).toBe(true)
     expect(inMemoryOrderRepository.items).toHaveLength(1)
   })

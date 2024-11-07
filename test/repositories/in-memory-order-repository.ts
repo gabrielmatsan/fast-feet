@@ -5,10 +5,7 @@ import {
   findManyNearbyParams,
 } from '@/domain/delivery/application/repositories/order-repository'
 import { Order } from '@/domain/delivery/enterprise/entities/order'
-import {
-  getDistanceBetweenCoordinates,
-  type Coordinate,
-} from 'test/utils/get-distance-between-coordinates'
+import { getDistanceBetweenCoordinates } from 'test/utils/get-distance-between-coordinates'
 
 export class InMemoryOrderRepository implements OrderRepository {
   public items: Order[] = []

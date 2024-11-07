@@ -3,7 +3,7 @@ import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import type { UserPayload } from '@/infra/auth/jwt-strategy'
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common'
 import { z } from 'zod'
-import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
 
 const addressBodyValidationSchema = z.object({
   street: z.string(),

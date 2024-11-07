@@ -10,7 +10,7 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
-import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
 import { WrongCredentialsError } from '@/domain/delivery/application/use-cases/error/wrong-credentials-error'
 
 const authenticateRecipientBodySchema = z.object({

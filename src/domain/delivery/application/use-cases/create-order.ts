@@ -8,14 +8,12 @@ import { Injectable } from '@nestjs/common'
 
 export interface CreateOrderRequest {
   recipientId: string
-  deliveryManId?: string | null
   addressId: string
   title: string
   content: string
   status: OrderStatus // Definir com o tipo OrderStatus
   isRemovable: boolean
   paymentMethod: string
-  expectedDeliveryDate: Date | null
   shipping: number
   deliveryLatitude: number
   deliveryLongitude: number
@@ -33,13 +31,11 @@ export class CreateOrderUseCase {
 
   async execute({
     recipientId,
-    deliveryManId,
     title,
     content,
     status,
     isRemovable,
     paymentMethod,
-    expectedDeliveryDate,
     shipping,
     deliveryLatitude,
     deliveryLongitude,
@@ -56,17 +52,16 @@ export class CreateOrderUseCase {
 
     const order = Order.create({
       recipientId: new UniqueEntityId(recipientId),
-      deliveryManId: deliveryManId ? new UniqueEntityId(deliveryManId) : null,
       addressId: address.id,
       title,
       content,
       status,
       isRemovable,
       paymentMethod,
-      expectedDeliveryDate,
       shipping,
       deliveryLatitude,
       deliveryLongitude,
+      createdAt: new Date(), // Define createdAt como a data atual
     })
 
     await this.orderRepository.create(order)

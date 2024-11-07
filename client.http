@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3333
-@accessToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODkzYTc5My0xODA3LTRjZWMtODcyMi04NzFlOWIzODViOWEiLCJpYXQiOjE3MzA5NDUzOTF9.gt5bgRbOtZOjA4sCpH011conaX3NlM0m_z8Zm9SMBPy8qQidMbb3yG_CPLeqXChZ7kxNYu3VxbCAwD-wQh7VljK44EDiTC5tddFRitS05ndqAIrVL3xB_A8VyeuTbxZ_7YW02lqfI_PaPvzPikcdNuGQqxBON2RbaKhEhEat5ip0xTtxtYLKkTz6Zdrol6d6jKGc-ZYi7dFlXICDxV1ZTy2uupRsHAuxrf8o3YUgBauF6O9QvHA33KstzkKiM5dQlTMeR84vGJVTpiWU5cAeGMH_rMEf4WAfwu7du1QS-DWHsMLvfpeQ8JRz0tCw0-8IPqFqFr6cYDpmkTqZq8-tqw
+@accessToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODkzYTc5My0xODA3LTRjZWMtODcyMi04NzFlOWIzODViOWEiLCJpYXQiOjE3MzA5OTQwOTQsImV4cCI6MTczMTA4MDQ5NH0.j4ghN9wCbtUHxJ6FJLqIx9ysDWqgl3aK-uVgTJFPBGGVFk38L4_wnMWURik8jADev6rGe5kaHvRukMgl4g5yIUs6CDFNQumgQ6i3AKybTiCL9mk0cOvlI0pKv5yVoSBIcgkoZZy9I1Z8Gu6rVLg5d3f08mSXxgrDdXfMCPihHVHVhIKT6ICMrGGlYOn9k_hVfXJ8YgiHfzAU91IZ-Lpf_c2KYcHy9ngF7dTSeSNCkHW_h8FKFeDP1JwpU1IDbntWEg3C-Tsl_Ds3DGsaetgehFvQRWtC1QVNaQrbpmT2IOgW4DmD0Yv-DHEmYLTe-pN-ilon_bZBiTxHrh5gofFQqA
 
 # @name create_recipient_account
 POST {{baseUrl}}/recipients
@@ -42,4 +42,23 @@ Authorization: Bearer {{accessToken}}
   "neighborhood": "Example Neighborhood",
   "latitude": -23.55052,
   "longitude": -46.633308
+}
+
+###
+
+# @name create_order
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "addressId": "some-address-id",
+  "title": "Order Title",
+  "content": "Order Content",
+  "status": "pending",
+  "isRemovable": true,
+  "paymentMethod": "credit_card",
+  "deliveryLatitude": -23.55052,
+  "deliveryLongitude": -46.633308,
+  "shipping": 15.0
 }
