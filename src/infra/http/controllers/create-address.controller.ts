@@ -6,7 +6,6 @@ import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const addressBodyValidationSchema = z.object({
-  recipientId: z.string(),
   street: z.string(),
   number: z.string(),
   zipcode: z.string(),

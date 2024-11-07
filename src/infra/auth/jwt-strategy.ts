@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
       secretOrKey: Buffer.from(publicKey, 'base64'),
 
-      alghorithm: ['RS256'],
+      algorithms: ['RS256'],
     })
   }
 
