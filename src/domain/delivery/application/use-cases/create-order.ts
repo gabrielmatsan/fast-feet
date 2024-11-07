@@ -4,6 +4,7 @@ import { OrderRepository } from '../repositories/order-repository'
 import { AddressRepository } from '../repositories/address-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
 
 export interface CreateOrderRequest {
   recipientId: string
@@ -22,6 +23,7 @@ export interface CreateOrderRequest {
 
 type CreateOrderResponse = Either<null, { order: Order }>
 
+@Injectable()
 export class CreateOrderUseCase {
   constructor(
     private orderRepository: OrderRepository,

@@ -6,6 +6,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { NeedAttachmentError } from './error/need-attachment-error'
 import { OrderAttachment } from '../../enterprise/entities/attachment-order'
 import { OrderAttachmentList } from '../../enterprise/entities/attachment-order-list'
+import { Injectable } from '@nestjs/common'
 
 export interface OrderDeliveredRequest {
   orderId: string
@@ -18,6 +19,7 @@ type OrderDeliveredResponse = Either<
   null
 >
 
+@Injectable()
 export class OrderDeliveredUseCase {
   constructor(private orderRepository: OrderRepository) {}
 
@@ -47,6 +49,7 @@ export class OrderDeliveredUseCase {
       })
     })
 
+    // eslint-disable-next-line eqeqeq
     if (orderAttachments.length == 0) {
       return left(new NeedAttachmentError(order.id.toString()))
     }

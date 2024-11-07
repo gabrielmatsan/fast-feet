@@ -1,4 +1,4 @@
-import type { OrderAttachment } from '../../enterprise/entities/attachment-order'
+import { OrderAttachment } from '../../enterprise/entities/attachment-order'
 
 export abstract class OrderAttachmentRepository {
   abstract createMany(attachments: OrderAttachment[]): Promise<void>

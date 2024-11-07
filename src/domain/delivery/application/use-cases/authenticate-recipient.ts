@@ -3,6 +3,7 @@ import { RecipientRepository } from '../repositories/recipient-repository'
 import { HashCompare } from '../../criptography/hash-compare'
 import { Encrypter } from '../../criptography/encrypter'
 import { WrongCredentialsError } from './error/wrong-credentials-error'
+import { Injectable } from '@nestjs/common'
 
 export interface AuthenticateRecipientRequest {
   cpf: string
@@ -14,6 +15,7 @@ type AuthenticateRecipientResponse = Either<
   { accessToken: string }
 >
 
+@Injectable()
 export class AuthenticateRecipientUseCase {
   constructor(
     private recipientRepository: RecipientRepository,

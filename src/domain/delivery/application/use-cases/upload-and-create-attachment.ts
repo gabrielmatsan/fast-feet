@@ -3,6 +3,7 @@ import { FyleTypeError } from './error/file-type-error'
 import { Attachment } from '../../enterprise/entities/attachment'
 import { Uploader } from '../../storage/uploader'
 import { AttachmentsRepository } from '../repositories/attachments-repository'
+import { Injectable } from '@nestjs/common'
 
 interface UploadAndCreateAttachmentsRequest {
   fileName: string
@@ -15,6 +16,7 @@ type UploadAndCreateAttachmentsResponse = Either<
   { attachment: Attachment }
 >
 
+@Injectable()
 export class UploadAndCreateAttachmentsUseCase {
   constructor(
     private uploader: Uploader,

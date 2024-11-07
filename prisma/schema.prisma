@@ -8,31 +8,34 @@ datasource db {
 }
 
 model Recipient {
-  id       String  @id @default(uuid())
-  cpf      String  @unique
-  email    String  @unique
-  name     String
-  phone    String
-  password String
-  orders   Order[]
+  id        String    @id @default(uuid())
+  cpf       String    @unique
+  email     String    @unique
+  name      String
+  phone     String
+  password  String
+  orders    Order[]
+  addresses Address[]
 
   @@map("recipients")
 }
 
 model DeliveryMan {
-  id        String  @id @default(uuid())
-  cpf       String  @unique
-  name      String
-  phone     String
-  latitude  Decimal
-  longitude Decimal
-  orders    Order[]
+  id                   String  @id @default(uuid())
+  cpf                  String  @unique
+  name                 String
+  phone                String
+  password             String
+  deliveryManLatitude  Decimal
+  deliveryManLongitude Decimal
+  orders               Order[]
 
   @@map("delivery_mens")
 }
 
 model Address {
   id           String  @id @default(uuid())
+  recipientId  String  @unique
   street       String
   number       String
   complement   String?
@@ -42,7 +45,9 @@ model Address {
   zipcode      String
   latitude     Decimal
   longitude    Decimal
-  orders       Order[]
+
+  orders    Order[]
+  recipient Recipient @relation(fields: [recipientId], references: [id])
 
   @@map("addresses")
 }

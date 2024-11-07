@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 import { DeliveryMan } from '../../enterprise/entities/delivery-man'
 import { DeliveryManRepository } from '../repositories/delivery-man-repository'
 import { DeliveryManAlreadyExistsError } from './error/delivery-man-already-exists-error'
+import { Injectable } from '@nestjs/common'
 
 export interface CreateDeliveryManRequest {
   cpf: string
@@ -19,6 +20,7 @@ type CreateDeliveryManResponse = Either<
   }
 >
 
+@Injectable()
 export class CreateDeliveryManUseCase {
   constructor(private deliveryManRepository: DeliveryManRepository) {}
 

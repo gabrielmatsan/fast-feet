@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from './error/resource-not-found-error'
 import { Order } from '../../enterprise/entities/order'
 import { DeliveryManRepository } from '../repositories/delivery-man-repository'
 import { OrderRepository } from '../repositories/order-repository'
-import { AddressRepository } from '../repositories/address-repository'
+import { Injectable } from '@nestjs/common'
 
 export interface FetchNearbyOrdersRequest {
   deliveryManId: string
@@ -17,6 +17,7 @@ type FetchNearbyOrdersResponse = Either<
   { orders: Order[] }
 >
 
+@Injectable()
 export class FetchNearbyOrdersUseCase {
   constructor(
     private orderRepository: OrderRepository,

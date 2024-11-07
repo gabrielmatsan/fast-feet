@@ -4,6 +4,7 @@ import { ResourceNotFoundError } from './error/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { DeliveryManRepository } from '../repositories/delivery-man-repository'
 import { HashCompare } from '../../criptography/hash-compare'
+import { Injectable } from '@nestjs/common'
 
 export interface DeleteDeliveryManRequest {
   deliveryManId: string
@@ -15,6 +16,7 @@ type DeleteDeliveryManResponse = Either<
   null
 >
 
+@Injectable()
 export class DeleteDeliveryManUseCase {
   constructor(
     private deliveryManRepository: DeliveryManRepository,

@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:3333
+@accessToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODkzYTc5My0xODA3LTRjZWMtODcyMi04NzFlOWIzODViOWEiLCJpYXQiOjE3MzA5NDQ2MDR9.PVv7UqaOyfyNWj3BYY_9FH2pFKi4zTpSkCxwDFFeMCUGsoEUY7zEZoaB9GxzJF_1EXsoDQTZdPwchFWW7ok6nBiPBkfBAJZjXNgB7amV4kSyI-e7fqQ720z5SApXdPBqLmkKMrz74qbX3_YXXBIgknSFqYuCvyiW55hmCB_g5itHGVz8MdBJKIiktY0kfDYyBmL7qP046vghTtJVAmvQzQoGZpQU5XiB-nmOxlLyYwO_UViAX_2yBbqPQSwD4ulReMBSchhqk2BpeMHboEUMH4syqnDRJgMVAVZ_YH3JkYFTEe-i0EeJ4nz-UUVO8jJwAZ6qyN3UuFdo7-ZSi4Pdxw
+
+# @name create_recipient_account
+POST {{baseUrl}}/recipients
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "cpf": "12345678900",
+  "email": "joao.silva@example.com",
+  "password": "senhaSegura123",
+  "phone": "+5511998765432"
+}
+
+###
+
+# @name authenticate-recipient
+POST {{baseUrl}}/authenticate-recipient
+Content-Type: application/json
+
+{
+  "cpf": "12345678900",
+  "password": "senhaSegura123"
+}
+
+###
+
+### Exemplo de Uso do Token em uma Requisição Autenticada
+# @name create_address
+POST {{baseUrl}}/addresses
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "street": "123 Example Street",
+  "number": "456",
+  "zipcode": "12345-678",
+  "city": "Example City",
+  "state": "EX",
+  "complement": "Apt 789",
+  "neighborhood": "Example Neighborhood",
+  "latitude": -23.55052,
+  "longitude": -46.633308
+}

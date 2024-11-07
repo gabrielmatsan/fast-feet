@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { WrongCredentialsError } from './error/wrong-credentials-error'
 import { HashCompare } from '../../criptography/hash-compare'
+import { Injectable } from '@nestjs/common'
 
 export interface DeleteRecipientRequest {
   recipientId: string
@@ -10,6 +11,7 @@ export interface DeleteRecipientRequest {
 
 type DeleteRecipientResponse = Either<WrongCredentialsError, null>
 
+@Injectable()
 export class DeleteRecipientUseCase {
   constructor(
     private recipientRepository: RecipientRepository,

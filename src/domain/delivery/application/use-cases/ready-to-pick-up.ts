@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { OrderRepository } from '../repositories/order-repository'
 import { ResourceNotFoundError } from './error/resource-not-found-error'
+import { Injectable } from '@nestjs/common'
 
 export interface ReadyToPickUpRequest {
   orderId: string
@@ -13,6 +14,7 @@ type ReadyToPickUpResponse = Either<
   null
 >
 
+@Injectable()
 export class ReadyToPickUpUseCase {
   constructor(private orderRepository: OrderRepository) {}
 

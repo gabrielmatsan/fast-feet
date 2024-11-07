@@ -3,6 +3,7 @@ import { HashCompare } from '../../criptography/hash-compare'
 import { Encrypter } from '../../criptography/encrypter'
 import { WrongCredentialsError } from './error/wrong-credentials-error'
 import { DeliveryManRepository } from '../repositories/delivery-man-repository'
+import { Injectable } from '@nestjs/common'
 
 export interface AuthenticateDeliveryRequest {
   cpf: string
@@ -14,6 +15,7 @@ type AuthenticateDeliveryResponse = Either<
   { accessToken: string }
 >
 
+@Injectable()
 export class AuthenticateDeliveryUseCase {
   constructor(
     private deliveryManRepository: DeliveryManRepository,

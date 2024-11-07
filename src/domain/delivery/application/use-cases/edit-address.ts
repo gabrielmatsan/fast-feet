@@ -4,6 +4,7 @@ import { AddressRepository } from '../repositories/address-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { ResourceNotFoundError } from './error/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { Injectable } from '@nestjs/common'
 
 export interface EditAddressRequest {
   recipientId: string
@@ -21,6 +22,7 @@ export interface EditAddressRequest {
 
 type EditAddressResponse = Either<ResourceNotFoundError, { address: Address }>
 
+@Injectable()
 export class EditAddressUseCase {
   constructor(
     private addressRepository: AddressRepository,

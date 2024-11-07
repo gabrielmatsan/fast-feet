@@ -4,6 +4,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { AddressRepository } from '../repositories/address-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { ResourceNotFoundError } from './error/resource-not-found-error'
+import { Injectable } from '@nestjs/common'
 
 export interface CreateAddressRequest {
   recipientId: string
@@ -20,6 +21,7 @@ export interface CreateAddressRequest {
 
 type CreateAddressResponse = Either<ResourceNotFoundError, { address: Address }>
 
+@Injectable()
 export class CreateAddressUseCase {
   constructor(
     private addressRepository: AddressRepository,
