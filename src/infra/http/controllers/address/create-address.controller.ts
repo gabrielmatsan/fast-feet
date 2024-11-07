@@ -1,6 +1,6 @@
 import { CreateAddressUseCase } from '@/domain/delivery/application/use-cases/create-address'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
-import type { UserPayload } from '@/infra/auth/jwt-strategy'
+import { UserPayload } from '@/infra/auth/jwt-strategy'
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'

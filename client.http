@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3333
-@accessToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODkzYTc5My0xODA3LTRjZWMtODcyMi04NzFlOWIzODViOWEiLCJpYXQiOjE3MzA5OTQwOTQsImV4cCI6MTczMTA4MDQ5NH0.j4ghN9wCbtUHxJ6FJLqIx9ysDWqgl3aK-uVgTJFPBGGVFk38L4_wnMWURik8jADev6rGe5kaHvRukMgl4g5yIUs6CDFNQumgQ6i3AKybTiCL9mk0cOvlI0pKv5yVoSBIcgkoZZy9I1Z8Gu6rVLg5d3f08mSXxgrDdXfMCPihHVHVhIKT6ICMrGGlYOn9k_hVfXJ8YgiHfzAU91IZ-Lpf_c2KYcHy9ngF7dTSeSNCkHW_h8FKFeDP1JwpU1IDbntWEg3C-Tsl_Ds3DGsaetgehFvQRWtC1QVNaQrbpmT2IOgW4DmD0Yv-DHEmYLTe-pN-ilon_bZBiTxHrh5gofFQqA
+@accessToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODkzYTc5My0xODA3LTRjZWMtODcyMi04NzFlOWIzODViOWEiLCJpYXQiOjE3MzEwMTQ5MzcsImV4cCI6MTczMTEwMTMzN30.jJDQfxhnNQEd7KCNeiaFcnjZRtmBW32KG4-6c80zOLb9NWcKvcWa2cgt7Eab5aGhbARtcX9LGoVld_IKfX8USVTJA6S5e2RC5s2cG_lr8dBypLcB5jaH9pYOR8ONBKc3tB2AMAHH5h0iIUDqy66iDWQhe7eFhGy05JUONzrjaZNVzB4QLCejVu1NQGuX75R8-ppuICzoHxU_Apm55lE_5IvONk7Gs-DvnTWLhbWMUWULtEXDT7gsg48enGXrtaw4V2Zgpxs4iB_Qivl1P2amUfiJlL0lP-3WU5m45jW2kGcRK_dpu9m7bXcUXdUcLgEmFRwzbyp3FYqgiI19yMxtjw
 
 # @name create_recipient_account
 POST {{baseUrl}}/recipients
@@ -61,4 +61,15 @@ Authorization: Bearer {{accessToken}}
   "deliveryLatitude": -23.55052,
   "deliveryLongitude": -46.633308,
   "shipping": 15.0
+}
+
+###
+
+# @name delete_delivery_man
+DELETE {{baseUrl}}/delivery-man
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+ "password":"senhaSegura123"
 }
