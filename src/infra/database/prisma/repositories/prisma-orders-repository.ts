@@ -49,13 +49,15 @@ export class PrismaOrdersRepository implements OrderRepository {
   }
 
   async findManyNearby({
-    latitude,
-    longitude,
+    deliveryLatitude,
+    deliveryLongitude,
     maxDistance,
   }: findManyNearbyParams): Promise<Order[]> {
     const orders = await this.prisma.$queryRaw<PrismaOrder[]>`
-    SELECT * FROM gyms
-    WHERE ( 6371 * acos( cos( radians(${latitude}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( latitude ) ) ) ) <= ${maxDistance} `
+      SELECT * FROM orders
+      WHERE ( 6371 * acos( cos( radians(${deliveryLatitude}) ) * cos( radians( delivery_longitude ) ) 
+      * cos( radians( delivery_latitude ) - radians(${deliveryLongitude}) ) 
+      + sin( radians(${deliveryLatitude}) ) * sin( radians( delivery_latitude ) ) ) ) <= ${maxDistance} `
 
     return orders.map((order) => OrdersMapper.toDomain(order))
   }

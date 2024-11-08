@@ -1,7 +1,6 @@
 import { Either, left, right } from '@/core/either'
 import { Address } from '../../enterprise/entities/address'
 import { AddressRepository } from '../repositories/address-repository'
-import { RecipientRepository } from '../repositories/recipient-repository'
 import { ResourceNotFoundError } from './error/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { Injectable } from '@nestjs/common'
@@ -24,10 +23,7 @@ type EditAddressResponse = Either<ResourceNotFoundError, { address: Address }>
 
 @Injectable()
 export class EditAddressUseCase {
-  constructor(
-    private addressRepository: AddressRepository,
-    private recipientRepository: RecipientRepository,
-  ) {}
+  constructor(private addressRepository: AddressRepository) {}
 
   async execute(addressData: EditAddressRequest): Promise<EditAddressResponse> {
     // Encontre o endereço pelo addressId

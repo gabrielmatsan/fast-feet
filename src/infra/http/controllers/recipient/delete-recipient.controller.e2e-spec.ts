@@ -5,10 +5,12 @@ import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { hash } from 'bcryptjs'
 import { RecipientFactory } from 'test/factories/make-recipient-factory'
+import { JwtService } from '@nestjs/jwt'
 
-describe('Authenticate Recipient E2E', () => {
+describe('Delete Recipient E2E', () => {
   let app: INestApplication
   let recipientFactory: RecipientFactory
+  let jwtService: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -18,26 +20,28 @@ describe('Authenticate Recipient E2E', () => {
 
     app = moduleRef.createNestApplication()
     recipientFactory = moduleRef.get(RecipientFactory)
+    jwtService = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[POST] /authenticate-recipient', async () => {
+  test('[DELETE] /recipient', async () => {
     const plainPassword = '123456'
+
+    // create recipient
     const recipient = await recipientFactory.makePrismaRecipient({
       password: await hash(plainPassword, 8),
     })
 
+    const accessToken = jwtService.sign({ sub: recipient.id.toString() })
+
     const response = await request(app.getHttpServer())
-      .post('/authenticate-recipient')
+      .delete('/recipient')
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        cpf: recipient.cpf,
         password: plainPassword,
       })
 
-    expect(response.status).toBe(201)
-    expect(response.body).toEqual({
-      access_token: expect.any(String),
-    })
+    expect(response.status).toBe(204)
   })
 })

@@ -44,14 +44,12 @@ describe('Delete Delivery Man E2E', () => {
 
     const accessToken = jwtService.sign({ sub: deliveryMan.id.toString() })
 
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .delete('/delivery-man')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         password: plainPassword,
       })
-
-    console.log('Corpo da requisição:', response.body)
 
     deliveryManOnDatabase = await prisma.deliveryMan.findUnique({
       where: {

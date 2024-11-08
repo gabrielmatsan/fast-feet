@@ -1,8 +1,8 @@
 import { Order } from '../../enterprise/entities/order'
 
 export interface findManyNearbyParams {
-  latitude: number
-  longitude: number
+  deliveryLatitude: number
+  deliveryLongitude: number
   maxDistance: number
 }
 

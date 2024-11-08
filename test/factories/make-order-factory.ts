@@ -1,7 +1,9 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Order, OrderProps } from '@/domain/delivery/enterprise/entities/order'
-import { Slug } from '@/domain/delivery/enterprise/entities/value-objects/slug'
+import { OrdersMapper } from '@/infra/database/prisma/mappers/prisma-orders-mapper'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
 
 export function makeOrder(
   override: Partial<OrderProps> = {},
@@ -29,4 +31,18 @@ export function makeOrder(
   )
 
   return order
+}
+
+@Injectable()
+export class OrderFactory {
+  constructor(private prisma: PrismaService) {}
+  async makeOrder(override: Partial<OrderProps> = {}): Promise<Order> {
+    const order = makeOrder(override)
+
+    await this.prisma.order.create({
+      data: OrdersMapper.toPersistent(order),
+    })
+
+    return order
+  }
 }
