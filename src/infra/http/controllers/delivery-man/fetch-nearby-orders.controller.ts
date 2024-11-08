@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import type { UserPayload } from '@/infra/auth/jwt-strategy'
+import { HttpOrdersPresenter } from '../../presenters/http-orders-presenter'
 
 const fetchNearbyOrdersBodySchema = z.object({
   maxDistance: z.number(),
@@ -43,7 +44,7 @@ export class FetchNearbyOrdersController {
 
     const orders = result.value.orders
     return {
-      orders: orders.map((order) => order),
+      orders: orders.map((order) => HttpOrdersPresenter.toHttp(order)),
     }
   }
 }

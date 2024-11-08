@@ -42,8 +42,8 @@ export class FetchNearbyOrdersUseCase {
     }
 
     const nearbyOrders = await this.orderRepository.findManyNearby({
-      latitude: deliveryManLocation.latitude,
-      longitude: deliveryManLocation.longitude,
+      deliveryLatitude: deliveryManLocation.latitude,
+      deliveryLongitude: deliveryManLocation.longitude,
       maxDistance,
     })
 

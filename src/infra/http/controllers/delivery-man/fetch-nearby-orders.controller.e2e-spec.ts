@@ -60,7 +60,7 @@ describe('FetchNearbyOrdersController (E2E)', () => {
       recipientId: recipient.id,
     })
 
-    orderFactory.makeOrder({
+    const order = await orderFactory.makeOrder({
       recipientId: recipient.id,
       addressId: address.id,
       status: 'pending',
@@ -97,5 +97,6 @@ describe('FetchNearbyOrdersController (E2E)', () => {
 
     console.log(response.body)
     expect(response.body.orders.length).toBe(1)
+    expect(response.body.orders[0].id).toEqual(order.id.toString())
   })
 })
