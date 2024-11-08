@@ -13,7 +13,7 @@ import { OrderFactory } from 'test/factories/make-order-factory'
 import { DeliveryManFactory } from 'test/factories/make-delivery-man-factory'
 import { AttachmentFactory } from 'test/factories/make-attachment-factory'
 
-describe('OrderInTransitController (E2E)', () => {
+describe('OrderDeliveredController (E2E)', () => {
   let app: INestApplication
 
   let recipientFactory: RecipientFactory
@@ -57,39 +57,51 @@ describe('OrderInTransitController (E2E)', () => {
     await app.close()
   })
 
-  test('[PATCH] /orders/:id/delivered', async () => {
+  test('[PUT] /orders/:id/delivered -mark order as delivered', async () => {
+    // crio o destinatario
     const recipient = await recipientFactory.makePrismaRecipient({
       password: await hash('123456', 8),
     })
 
+    // crio o endereco vinculado ao destinatario
     const address = await addressFactory.makePrismaAddress({
       recipientId: recipient.id,
     })
 
-    const deliveryMan = await deliveryManFactory.makePrismaDeliveryMan({
-      deliveryManLatitude: 90,
-      deliveryManLongitude: 90,
-    })
+    // crio o entregador
+    const deliveryMan = await deliveryManFactory.makePrismaDeliveryMan()
+    // crio o token de autenticacao do entregador
     const accessToken = jwtService.sign({ sub: deliveryMan.id.toString() })
 
+    // crio o pedido vinculado ao destinatario, endereco e entregador
     const order = await orderFactory.makeOrder({
       recipientId: recipient.id,
       addressId: address.id,
-      status: 'pending',
+      status: 'inTransit',
       isRemovable: true,
       deliveryManId: deliveryMan.id,
     })
 
+    // crio um anexo
     const attachment1 = await attachmentFactory.makePrismaAttachment()
+    // verifico se o anexo foi criado no banco de dados
+    const onDatabaseTest = await prisma.attachment.findUnique({
+      where: {
+        id: attachment1.id.toString(),
+      },
+    })
+    // foi criado
+    expect(onDatabaseTest).toBeTruthy()
+    console.log(onDatabaseTest)
 
+    // enviando o attachmentId para marcar o pedido como entregue
     const response = await request(app.getHttpServer())
-      .put(`/orders/${order.id.toString()}/in-transit`)
+      .put(`/orders/${order.id.toString()}/delivered`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        attachments: [attachment1.id.toString()],
+        attachmentsIds: [attachment1.id.toString()],
       })
 
-    console.log(response.body)
     const orderOnDatabase = await prisma.order.findUnique({
       where: {
         id: order.id.toString(),

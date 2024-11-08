@@ -49,8 +49,7 @@ export class OrderDeliveredUseCase {
       })
     })
 
-    // eslint-disable-next-line eqeqeq
-    if (orderAttachments.length == 0) {
+    if (orderAttachments.length === 0) {
       return left(new NeedAttachmentError(order.id.toString()))
     }
 
