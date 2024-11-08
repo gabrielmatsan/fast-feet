@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   HttpCode,
-  UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
@@ -13,7 +12,7 @@ import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt-strategy'
 
 const deleteDeliveryManBodySchema = z.object({
-  password: z.string(),
+  password: z.string().min(1),
 })
 
 type DeleteDeliveryManBodySchema = z.infer<typeof deleteDeliveryManBodySchema>
@@ -23,17 +22,17 @@ export class DeleteDeliveryManController {
   constructor(private deleteDeliveryMan: DeleteDeliveryManUseCase) {}
 
   @Delete()
-  @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(deleteDeliveryManBodySchema))
+  @HttpCode(204)
   async handle(
-    @Body()
+    @Body(new ZodValidationPipe(deleteDeliveryManBodySchema))
     body: DeleteDeliveryManBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
+    const { password } = body
+
+    console.log()
     console.log('Received body:', body)
     console.log('AQUI!!!')
-
-    const { password } = body
 
     const result = await this.deleteDeliveryMan.execute({
       deliveryManId: user.sub,

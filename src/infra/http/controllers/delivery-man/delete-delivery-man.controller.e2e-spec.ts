@@ -51,7 +51,7 @@ describe('Delete Delivery Man E2E', () => {
         password: plainPassword,
       })
 
-    console.log(response.body)
+    console.log('Corpo da requisição:', response.body)
 
     deliveryManOnDatabase = await prisma.deliveryMan.findUnique({
       where: {

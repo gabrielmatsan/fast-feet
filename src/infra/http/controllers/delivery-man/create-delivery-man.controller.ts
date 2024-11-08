@@ -5,7 +5,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
@@ -35,8 +34,10 @@ export class CreateDeliveryManController {
   @Post()
   @Public()
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(createDeliveryManBodySchema))
-  async handle(@Body() body: CreateDeliveryManBodySchema) {
+  async handle(
+    @Body(new ZodValidationPipe(createDeliveryManBodySchema))
+    body: CreateDeliveryManBodySchema,
+  ) {
     const {
       name,
       cpf,
