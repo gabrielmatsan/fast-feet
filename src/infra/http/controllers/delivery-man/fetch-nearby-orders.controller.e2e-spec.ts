@@ -76,6 +76,16 @@ describe('FetchNearbyOrdersController (E2E)', () => {
       status: 'pending',
       isRemovable: true,
       deliveryManId: null,
+      deliveryLatitude: 90,
+      deliveryLongitude: 90,
+    })
+
+    await orderFactory.makeOrder({
+      recipientId: recipient.id,
+      addressId: address.id,
+      status: 'pending',
+      isRemovable: true,
+      deliveryManId: null,
       deliveryLatitude: 1,
       deliveryLongitude: 1,
     })
@@ -95,8 +105,7 @@ describe('FetchNearbyOrdersController (E2E)', () => {
         deliveryManlongitude: deliveryMan.deliveryManLongitude,
       })
 
-    console.log(response.body)
-    expect(response.body.orders.length).toBe(1)
+    expect(response.body.orders.length).toBe(2)
     expect(response.body.orders[0].id).toEqual(order.id.toString())
   })
 })

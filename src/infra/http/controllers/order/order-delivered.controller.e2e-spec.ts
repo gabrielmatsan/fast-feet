@@ -11,17 +11,19 @@ import { hash } from 'bcryptjs'
 import { AddressFactory } from 'test/factories/make-address-factory'
 import { OrderFactory } from 'test/factories/make-order-factory'
 import { DeliveryManFactory } from 'test/factories/make-delivery-man-factory'
+import { AttachmentFactory } from 'test/factories/make-attachment-factory'
 
-describe('AcceptOrderController (E2E)', () => {
+describe('OrderInTransitController (E2E)', () => {
   let app: INestApplication
 
   let recipientFactory: RecipientFactory
   let addressFactory: AddressFactory
   let orderFactory: OrderFactory
   let deliveryManFactory: DeliveryManFactory
+  let attachmentFactory: AttachmentFactory
 
-  let prisma: PrismaService
   let jwtService: JwtService
+  let prisma: PrismaService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -33,6 +35,7 @@ describe('AcceptOrderController (E2E)', () => {
         PrismaService,
         OrderFactory,
         DeliveryManFactory,
+        AttachmentFactory,
       ],
     }).compile()
 
@@ -42,6 +45,7 @@ describe('AcceptOrderController (E2E)', () => {
     addressFactory = moduleRef.get(AddressFactory)
     orderFactory = moduleRef.get(OrderFactory)
     deliveryManFactory = moduleRef.get(DeliveryManFactory)
+    attachmentFactory = moduleRef.get(AttachmentFactory)
 
     jwtService = moduleRef.get(JwtService)
     prisma = moduleRef.get(PrismaService)
@@ -53,7 +57,7 @@ describe('AcceptOrderController (E2E)', () => {
     await app.close()
   })
 
-  test('[PATCH] /orders/:id/accept', async () => {
+  test('[PATCH] /orders/:id/delivered', async () => {
     const recipient = await recipientFactory.makePrismaRecipient({
       password: await hash('123456', 8),
     })
@@ -62,33 +66,43 @@ describe('AcceptOrderController (E2E)', () => {
       recipientId: recipient.id,
     })
 
+    const deliveryMan = await deliveryManFactory.makePrismaDeliveryMan({
+      deliveryManLatitude: 90,
+      deliveryManLongitude: 90,
+    })
+    const accessToken = jwtService.sign({ sub: deliveryMan.id.toString() })
+
     const order = await orderFactory.makeOrder({
       recipientId: recipient.id,
       addressId: address.id,
       status: 'pending',
       isRemovable: true,
-      deliveryManId: null,
+      deliveryManId: deliveryMan.id,
     })
 
-    const deliveryMan = await deliveryManFactory.makePrismaDeliveryMan()
-    const accessToken = jwtService.sign({ sub: deliveryMan.id.toString() })
+    const attachment1 = await attachmentFactory.makePrismaAttachment()
 
     const response = await request(app.getHttpServer())
-      .patch(`/orders/${order.id.toString()}/accept`)
+      .put(`/orders/${order.id.toString()}/in-transit`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .send()
+      .send({
+        attachments: [attachment1.id.toString()],
+      })
 
-    // Verificar se a resposta tem o status e estrutura corretos
-    expect(response.status).toBe(204)
-
-    // Verificar se o pedido foi salvo no banco de dados
-    const onOrderDatabase = await prisma.order.findFirst({
+    console.log(response.body)
+    const orderOnDatabase = await prisma.order.findUnique({
       where: {
         id: order.id.toString(),
       },
     })
-    expect(onOrderDatabase).toBeTruthy()
-    expect(onOrderDatabase?.deliveryManId).toEqual(deliveryMan.id.toString())
-    expect(onOrderDatabase?.status).toEqual('awaiting')
+    expect(orderOnDatabase).toBeTruthy()
+
+    const attachmentsOnDatabase = await prisma.attachment.findMany({
+      where: {
+        orderId: order.id.toString(),
+      },
+    })
+
+    expect(attachmentsOnDatabase).toHaveLength(1)
   })
 })

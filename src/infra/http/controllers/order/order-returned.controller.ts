@@ -1,4 +1,4 @@
-import { ReadyToPickUpUseCase } from '@/domain/delivery/application/use-cases/ready-to-pick-up'
+import { OrderReturnedUseCase } from '@/domain/delivery/application/use-cases/order-returned'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt-strategy'
 import {
@@ -9,16 +9,16 @@ import {
   BadRequestException,
 } from '@nestjs/common'
 
-@Controller('/orders/:id/ready-to-pick-up')
-export class ReadyToPickUpController {
-  constructor(private readyToPickUp: ReadyToPickUpUseCase) {}
+@Controller('/orders/:id/returned')
+export class OrderReturnedController {
+  constructor(private orderReturned: OrderReturnedUseCase) {}
 
   @Patch()
   @HttpCode(204)
   async handle(@Param('id') orderId: string, @CurrentUser() user: UserPayload) {
-    const recipientId = user.sub
+    const deliveryManId = user.sub
 
-    const result = await this.readyToPickUp.execute({ orderId, recipientId })
+    const result = await this.orderReturned.execute({ orderId, deliveryManId })
 
     if (result.isLeft()) {
       throw new BadRequestException(result.value.message)

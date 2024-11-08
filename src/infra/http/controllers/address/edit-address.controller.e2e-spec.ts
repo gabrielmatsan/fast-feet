@@ -60,7 +60,7 @@ describe('Edit Address Controller (E2E)', () => {
 
     expect(addressOnDatabase.id).toEqual(address.id.toString())
 
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .put(`/address/${address.id}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
@@ -74,8 +74,6 @@ describe('Edit Address Controller (E2E)', () => {
         latitude: -23.55052,
         longitude: -46.633308,
       })
-
-    console.log(response.body)
 
     addressOnDatabase = await prisma.address.findUnique({
       where: {

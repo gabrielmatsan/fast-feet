@@ -3,7 +3,7 @@ import { BadRequestException, Body, Controller, Get } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
-import type { UserPayload } from '@/infra/auth/jwt-strategy'
+import { UserPayload } from '@/infra/auth/jwt-strategy'
 import { HttpOrdersPresenter } from '../../presenters/http-orders-presenter'
 
 const fetchNearbyOrdersBodySchema = z.object({

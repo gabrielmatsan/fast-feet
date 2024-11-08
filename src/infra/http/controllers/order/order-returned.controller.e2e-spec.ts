@@ -12,7 +12,7 @@ import { AddressFactory } from 'test/factories/make-address-factory'
 import { OrderFactory } from 'test/factories/make-order-factory'
 import { DeliveryManFactory } from 'test/factories/make-delivery-man-factory'
 
-describe('AcceptOrderController (E2E)', () => {
+describe('OrderReturnedController (E2E)', () => {
   let app: INestApplication
 
   let recipientFactory: RecipientFactory
@@ -20,8 +20,8 @@ describe('AcceptOrderController (E2E)', () => {
   let orderFactory: OrderFactory
   let deliveryManFactory: DeliveryManFactory
 
-  let prisma: PrismaService
   let jwtService: JwtService
+  let prisma: PrismaService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -53,7 +53,7 @@ describe('AcceptOrderController (E2E)', () => {
     await app.close()
   })
 
-  test('[PATCH] /orders/:id/accept', async () => {
+  test('[PATCH] /orders/:id/returned', async () => {
     const recipient = await recipientFactory.makePrismaRecipient({
       password: await hash('123456', 8),
     })
@@ -62,33 +62,31 @@ describe('AcceptOrderController (E2E)', () => {
       recipientId: recipient.id,
     })
 
+    const deliveryMan = await deliveryManFactory.makePrismaDeliveryMan({
+      deliveryManLatitude: 90,
+      deliveryManLongitude: 90,
+    })
+    const accessToken = jwtService.sign({ sub: deliveryMan.id.toString() })
+
     const order = await orderFactory.makeOrder({
       recipientId: recipient.id,
       addressId: address.id,
       status: 'pending',
       isRemovable: true,
-      deliveryManId: null,
+      deliveryManId: deliveryMan.id,
     })
 
-    const deliveryMan = await deliveryManFactory.makePrismaDeliveryMan()
-    const accessToken = jwtService.sign({ sub: deliveryMan.id.toString() })
-
     const response = await request(app.getHttpServer())
-      .patch(`/orders/${order.id.toString()}/accept`)
+      .patch(`/orders/${order.id.toString()}/returned`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    // Verificar se a resposta tem o status e estrutura corretos
-    expect(response.status).toBe(204)
-
-    // Verificar se o pedido foi salvo no banco de dados
-    const onOrderDatabase = await prisma.order.findFirst({
+    const orderOnDatabase = await prisma.order.findUnique({
       where: {
         id: order.id.toString(),
       },
     })
-    expect(onOrderDatabase).toBeTruthy()
-    expect(onOrderDatabase?.deliveryManId).toEqual(deliveryMan.id.toString())
-    expect(onOrderDatabase?.status).toEqual('awaiting')
+    expect(response.status).toBe(204)
+    expect(orderOnDatabase?.status).toBe('returned')
   })
 })

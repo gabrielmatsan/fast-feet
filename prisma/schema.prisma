@@ -8,14 +8,14 @@ datasource db {
 }
 
 model Recipient {
-  id           String         @id @default(uuid())
-  cpf          String         @unique
-  email        String         @unique
-  name         String
-  phone        String
-  password     String
-  orders       Order[]
-  addresses    Address[]
+  id            String         @id @default(uuid())
+  cpf           String         @unique
+  email         String         @unique
+  name          String
+  phone         String
+  password      String
+  orders        Order[]
+  addresses     Address[]
   notifications Notification[]
 
   @@map("recipients")
@@ -78,33 +78,34 @@ model Order {
   deliveryLongitude    Float       @map("delivery_longitude")
   shipping             Float
 
-  recipient  Recipient    @relation(fields: [recipientId], references: [id])
-  delivery   DeliveryMan? @relation(fields: [deliveryManId], references: [id])
-  address    Address      @relation(fields: [addressId], references: [id])
+  recipient   Recipient    @relation(fields: [recipientId], references: [id])
+  delivery    DeliveryMan? @relation(fields: [deliveryManId], references: [id])
+  address     Address      @relation(fields: [addressId], references: [id])
   attachments Attachment[]
 
   @@map("orders")
 }
 
 model Attachment {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   title   String
   url     String
-  orderId String @map("order_id")
+  orderId String? @map("order_id")
 
-  order Order @relation(fields: [orderId], references: [id])
+  order Order? @relation(fields: [orderId], references: [id])
 
   @@map("attachments")
 }
 
 model Notification {
-  id        String    @id @default(uuid())
+  id          String    @id @default(uuid())
   recipientId String
-  title     String
-  content   String
-  readAt    DateTime? @map("read_at")
-  createdAt DateTime  @default(now()) @map("created_at")
+  title       String
+  content     String
+  readAt      DateTime? @map("read_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
 
-  recipient   Recipient @relation(fields: [recipientId], references: [id])
+  recipient Recipient @relation(fields: [recipientId], references: [id])
+
   @@map("notifications")
 }
