@@ -6,18 +6,15 @@ import { DomainEvents } from '@/core/events/domain-events'
 import { envSchema } from '@/infra/env/env'
 
 config({ path: '.env', override: true })
-
 config({ path: '.env.test', override: true })
 
 const env = envSchema.parse(process.env)
 
 const prisma = new PrismaClient()
 
-function generateUniqueDatabaseUrl(schemaId: string) {
+function generateUniqueDatabaseURL(schemaId: string) {
   if (!env.DATABASE_URL) {
-    throw new Error(
-      'Please provide a DATABASE_URL environment variable inside .env',
-    )
+    throw new Error('Please provider a DATABASE_URL environment variable')
   }
 
   const url = new URL(env.DATABASE_URL)
@@ -30,8 +27,9 @@ function generateUniqueDatabaseUrl(schemaId: string) {
 const schemaId = randomUUID()
 
 beforeAll(async () => {
-  const databaseUrl = generateUniqueDatabaseUrl(schemaId)
-  process.env.DATABASE_URL = databaseUrl
+  const databaseURL = generateUniqueDatabaseURL(schemaId)
+
+  process.env.DATABASE_URL = databaseURL
 
   DomainEvents.shouldRun = false
 

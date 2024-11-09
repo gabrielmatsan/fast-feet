@@ -13,7 +13,7 @@ import { DeliveryManFactory } from 'test/factories/make-delivery-man-factory'
 import { DomainEvents } from '@/core/events/domain-events'
 import { waitFor } from 'test/utils/wait-for'
 
-describe('On Order in Transit (E2E)', () => {
+describe('On Order Returned (E2E)', () => {
   let app: INestApplication
 
   let recipientFactory: RecipientFactory
