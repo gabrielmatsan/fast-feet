@@ -5,6 +5,7 @@ import { DatabaseModule } from './database/database.module'
 import { HttpModule } from './http/http.module'
 import { EnvModule } from './env/env.module'
 import { AuthModule } from './auth/auth.module'
+import { EventsModule } from './events/events.module'
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module'
     HttpModule,
     EnvModule,
     AuthModule,
+    EventsModule,
   ],
 })
 export class AppModule {}

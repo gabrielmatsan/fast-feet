@@ -8,6 +8,7 @@ import { OrdersMapper } from '../mappers/prisma-orders-mapper'
 import { PrismaService } from '../prisma.service'
 import { Order as PrismaOrder } from '@prisma/client'
 import { OrderAttachmentRepository } from '@/domain/delivery/application/repositories/order-attachments-repository'
+import { DomainEvents } from '@/core/events/domain-events'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrderRepository {
@@ -42,6 +43,8 @@ export class PrismaOrdersRepository implements OrderRepository {
         order.attachments.getRemovedItems(),
       ),
     ])
+
+    DomainEvents.dispatchEventsForAggregate(order.id)
   }
 
   async delete(order: Order): Promise<void> {

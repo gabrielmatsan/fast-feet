@@ -12,18 +12,39 @@ import { AttachmentsRepository } from '@/domain/delivery/application/repositorie
 import { PrismaAttachmentsRepository } from './prisma/repositories/prisma-attachments-repository'
 import { OrderAttachmentRepository } from '@/domain/delivery/application/repositories/order-attachments-repository'
 import { PrismaOrderAttachmentsRepository } from './prisma/repositories/prisma-order-attachments'
+import { NotificationRepository } from '@/domain/notification/application/repositories/notification-repository'
+import { PrismaNotificationsRepository } from './prisma/repositories/prisma-notifications-repository'
 
 @Module({
   providers: [
     PrismaService,
-    { provide: RecipientRepository, useClass: PrismaRecipientsRepository },
-    { provide: DeliveryManRepository, useClass: PrismaDeliveryMensRepository },
-    { provide: AddressRepository, useClass: PrismaAddressesRepository },
-    { provide: OrderRepository, useClass: PrismaOrdersRepository },
-    { provide: AttachmentsRepository, useClass: PrismaAttachmentsRepository },
+    {
+      provide: RecipientRepository,
+      useClass: PrismaRecipientsRepository,
+    },
+    {
+      provide: DeliveryManRepository,
+      useClass: PrismaDeliveryMensRepository,
+    },
+    {
+      provide: AddressRepository,
+      useClass: PrismaAddressesRepository,
+    },
+    {
+      provide: OrderRepository,
+      useClass: PrismaOrdersRepository,
+    },
+    {
+      provide: AttachmentsRepository,
+      useClass: PrismaAttachmentsRepository,
+    },
     {
       provide: OrderAttachmentRepository,
       useClass: PrismaOrderAttachmentsRepository,
+    },
+    {
+      provide: NotificationRepository,
+      useClass: PrismaNotificationsRepository,
     },
   ],
   exports: [
@@ -34,6 +55,7 @@ import { PrismaOrderAttachmentsRepository } from './prisma/repositories/prisma-o
     OrderRepository,
     AttachmentsRepository,
     OrderAttachmentRepository,
+    NotificationRepository,
   ],
 })
 export class DatabaseModule {}

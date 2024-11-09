@@ -1,7 +1,9 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { EventHandler } from '@/core/events/event-handler'
 import { OrderReturnedEvent } from '@/domain/delivery/enterprise/events/order-returned-event'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class OnOrderReturned implements EventHandler {
   constructor() {
     this.setupSubscriptions()
