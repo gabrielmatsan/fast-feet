@@ -1,19 +1,20 @@
 import { Order } from '@/domain/delivery/enterprise/entities/order'
-import { DeliveryMan } from '@/domain/delivery/enterprise/entities/delivery-man'
-import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { makeDeliveryMan } from 'test/factories/make-delivery-man-factory'
 import { makeOrder } from 'test/factories/make-order-factory'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { InMemoryDeliveryManRepository } from 'test/repositories/in-memory-delivery-man-repository'
 import { FetchNearbyOrdersUseCase } from './fetch-nearby-orders'
+import { InMemoryOrderAttachmentsRepository } from 'test/repositories/in-memory-order-attachments-repository'
 
 describe('Fetch Nearby Orders UseCase', () => {
   let orderRepository: InMemoryOrderRepository
   let deliveryManRepository: InMemoryDeliveryManRepository
+  let orderAttachmentsRepository: InMemoryOrderAttachmentsRepository
   let sut: FetchNearbyOrdersUseCase
 
   beforeEach(() => {
-    orderRepository = new InMemoryOrderRepository()
+    orderAttachmentsRepository = new InMemoryOrderAttachmentsRepository()
+    orderRepository = new InMemoryOrderRepository(orderAttachmentsRepository)
     deliveryManRepository = new InMemoryDeliveryManRepository()
     sut = new FetchNearbyOrdersUseCase(orderRepository, deliveryManRepository)
   })

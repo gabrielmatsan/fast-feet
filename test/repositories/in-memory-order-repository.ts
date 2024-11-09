@@ -46,13 +46,13 @@ export class InMemoryOrderRepository implements OrderRepository {
   }
 
   async findManyNearby({
-    latitude,
-    longitude,
+    deliveryLatitude,
+    deliveryLongitude,
     maxDistance,
   }: findManyNearbyParams): Promise<Order[]> {
     return this.items.filter((item) => {
       const distance = getDistanceBetweenCoordinates(
-        { latitude, longitude },
+        { latitude: deliveryLatitude, longitude: deliveryLongitude },
         { latitude: item.deliveryLatitude, longitude: item.deliveryLongitude },
       )
 

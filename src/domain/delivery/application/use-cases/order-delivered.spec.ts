@@ -16,7 +16,7 @@ describe('Order Delivered Use Case', () => {
       inMemoryOrderAttachmentsRepository,
     )
 
-    sut = new OrderDeliveredUseCase(inMemoryOrderRepository)
+    sut = new OrderDeliveredUseCase(inMemoryOrderRepository,)
   })
 
   it('should be able to mark an order as delivered', async () => {
