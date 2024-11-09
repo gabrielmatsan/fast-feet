@@ -35,6 +35,8 @@ import { UploadAndCreateAttachmentController } from './controllers/attachments/u
 import { UploadAndCreateAttachmentsUseCase } from '@/domain/delivery/application/use-cases/upload-and-create-attachment'
 import { OrderDeliveredController } from './controllers/order/order-delivered.controller'
 import { OrderDeliveredUseCase } from '@/domain/delivery/application/use-cases/order-delivered'
+import { ReadNotificationController } from './controllers/recipient/read-notification.controller'
+import { ReadNotificationUseCase } from '@/domain/notification/application/use-cases/read-notification'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -55,6 +57,7 @@ import { OrderDeliveredUseCase } from '@/domain/delivery/application/use-cases/o
     OrderInTransitController,
     UploadAndCreateAttachmentController,
     OrderDeliveredController,
+    ReadNotificationController,
   ],
   providers: [
     CreateRecipientUseCase,
@@ -73,6 +76,7 @@ import { OrderDeliveredUseCase } from '@/domain/delivery/application/use-cases/o
     OrderTransitUseCase,
     UploadAndCreateAttachmentsUseCase,
     OrderDeliveredUseCase,
+    ReadNotificationUseCase,
   ],
 })
 export class HttpModule {}

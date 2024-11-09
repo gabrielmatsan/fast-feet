@@ -28,10 +28,10 @@ describe('On Order in Transit (E2E)', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
       providers: [
+        PrismaService,
         RecipientFactory,
         AddressFactory,
         CreateOrderUseCase,
-        PrismaService,
         OrderFactory,
         DeliveryManFactory,
       ],
@@ -78,6 +78,9 @@ describe('On Order in Transit (E2E)', () => {
           recipientId: recipient.id.toString(),
         },
       })
+
+      console.log('notificationOnDatabase')
+      console.log(notificationOnDatabase)
 
       expect(notificationOnDatabase).toBeTruthy()
       expect(notificationOnDatabase).not.toBeNull()

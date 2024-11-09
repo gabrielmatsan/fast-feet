@@ -52,7 +52,7 @@ describe('On Order in Transit (E2E)', () => {
     await app.init()
   })
 
-  it('should be send notification when order is in transit', async () => {
+  it('should be send notification when order is returned', async () => {
     const recipient = await recipientFactory.makePrismaRecipient()
     const address = await addressFactory.makePrismaAddress({
       recipientId: recipient.id,

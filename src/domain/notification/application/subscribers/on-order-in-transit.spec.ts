@@ -1,5 +1,4 @@
 import { makeOrder } from 'test/factories/make-order-factory'
-import { OnOrderDelivered } from './on-order-delivered'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { InMemoryOrderAttachmentsRepository } from 'test/repositories/in-memory-order-attachments-repository'
 import { OnOrderInTransit } from './on-order-in-transit'
