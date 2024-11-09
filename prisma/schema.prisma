@@ -101,7 +101,6 @@ model Notification {
   id          String    @id @default(uuid())
   recipientId String
   title       String
-  content     String
   readAt      DateTime? @map("read_at")
   createdAt   DateTime  @default(now()) @map("created_at")
 
