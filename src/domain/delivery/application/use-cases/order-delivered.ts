@@ -59,6 +59,7 @@ export class OrderDeliveredUseCase {
 
     order.attachments = new OrderAttachmentList(orderAttachments)
     await this.orderRepository.update(order)
+
     for (const attachmentId of attachmentIds) {
       await this.attachmentsRepository.updateOrderId(
         attachmentId,

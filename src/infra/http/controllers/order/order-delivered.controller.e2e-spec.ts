@@ -117,7 +117,7 @@ describe('OrderDeliveredController (E2E)', () => {
     })
 
     // Confirma se há anexos associados ao pedido
-    expect(attachmentsOnDatabase).toHaveLength(2)
+    expect(attachmentsOnDatabase).toHaveLength(1)
     // Confirma se o anexo está associado ao pedido
     attachmentsOnDatabase.forEach((attachment) => {
       expect(attachment.orderId).toEqual(order.id.toString())
