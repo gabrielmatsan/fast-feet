@@ -12,11 +12,4 @@ export class PrismaAttachmentsRepository implements AttachmentsRepository {
 
     await this.prisma.attachment.create({ data })
   }
-
-  async updateOrderId(attachmentId: string, orderId: string): Promise<void> {
-    await this.prisma.attachment.update({
-      where: { id: attachmentId },
-      data: { orderId },
-    })
-  }
 }

@@ -7,7 +7,6 @@ import { NeedAttachmentError } from './error/need-attachment-error'
 import { OrderAttachment } from '../../enterprise/entities/attachment-order'
 import { OrderAttachmentList } from '../../enterprise/entities/attachment-order-list'
 import { Injectable } from '@nestjs/common'
-import { AttachmentsRepository } from '../repositories/attachments-repository'
 
 export interface OrderDeliveredRequest {
   orderId: string
@@ -22,10 +21,7 @@ type OrderDeliveredResponse = Either<
 
 @Injectable()
 export class OrderDeliveredUseCase {
-  constructor(
-    private orderRepository: OrderRepository,
-    private attachmentsRepository: AttachmentsRepository,
-  ) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     orderId,
@@ -58,16 +54,11 @@ export class OrderDeliveredUseCase {
     }
 
     order.attachments = new OrderAttachmentList(orderAttachments)
-    await this.orderRepository.update(order)
-
-    for (const attachmentId of attachmentIds) {
-      await this.attachmentsRepository.updateOrderId(
-        attachmentId,
-        order.id.toString(),
-      )
-    }
 
     order.markAsDelivered()
+
+    await this.orderRepository.update(order)
+
     return right(null)
   }
 }
