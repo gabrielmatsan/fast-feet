@@ -84,6 +84,7 @@ describe('OrderDeliveredController (E2E)', () => {
 
     // crio um anexo
     const attachment1 = await attachmentFactory.makePrismaAttachment()
+
     // verifico se o anexo foi criado no banco de dados
     const onDatabaseTest = await prisma.attachment.findUnique({
       where: {
@@ -95,7 +96,7 @@ describe('OrderDeliveredController (E2E)', () => {
     console.log(onDatabaseTest)
 
     // enviando o attachmentId para marcar o pedido como entregue
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .put(`/orders/${order.id.toString()}/delivered`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
@@ -115,6 +116,13 @@ describe('OrderDeliveredController (E2E)', () => {
       },
     })
 
-    expect(attachmentsOnDatabase).toHaveLength(1)
+    // Confirma se há anexos associados ao pedido
+    expect(attachmentsOnDatabase).toHaveLength(2)
+    // Confirma se o anexo está associado ao pedido
+    attachmentsOnDatabase.forEach((attachment) => {
+      expect(attachment.orderId).toEqual(order.id.toString())
+    })
+
+    expect(attachmentsOnDatabase)
   })
 })
