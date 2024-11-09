@@ -14,7 +14,7 @@ export class PrismaOrderAttachmentsRepository
       return
     }
 
-    const data = OrderAttachmentsMapper.toPersistent(attachments)
+    const data = OrderAttachmentsMapper.toPersistentUpdateMany(attachments)
 
     await this.prisma.attachment.updateMany(data)
   }

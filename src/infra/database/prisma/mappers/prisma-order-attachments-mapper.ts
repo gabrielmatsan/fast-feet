@@ -35,4 +35,23 @@ export class OrderAttachmentsMapper {
       },
     }
   }
+
+  static toPersistentUpdateMany(
+    attachments: OrderAttachment[],
+  ): Prisma.AttachmentUpdateManyArgs {
+    const attachmentIds = attachments.map((attachment) => {
+      return attachment.attachmentId.toString()
+    })
+
+    return {
+      where: {
+        id: {
+          in: attachmentIds,
+        },
+      },
+      data: {
+        orderId: attachments[0].orderId.toString(),
+      },
+    }
+  }
 }

@@ -32,9 +32,12 @@ export class PrismaOrdersRepository implements OrderRepository {
         },
         data,
       }),
+      this.orderAttachmentsRepository.createMany(order.attachments.getItems()),
+
       this.orderAttachmentsRepository.createMany(
         order.attachments.getNewItems(),
       ),
+
       this.orderAttachmentsRepository.deleteMany(
         order.attachments.getRemovedItems(),
       ),

@@ -92,10 +92,9 @@ describe('OrderDeliveredController (E2E)', () => {
     })
     // foi criado
     expect(onDatabaseTest).toBeTruthy()
-    console.log(onDatabaseTest)
 
     // enviando o attachmentId para marcar o pedido como entregue
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .put(`/orders/${order.id.toString()}/delivered`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
@@ -115,8 +114,7 @@ describe('OrderDeliveredController (E2E)', () => {
       },
     })
 
-    console.log(attachmentsOnDatabase)
-
     expect(attachmentsOnDatabase).toHaveLength(1)
+    expect(attachmentsOnDatabase[0].id).toBe(attachment1.id.toString())
   })
 })
